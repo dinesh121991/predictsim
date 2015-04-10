@@ -64,7 +64,7 @@ predict_d:  $(ALL_PREDICTION_FILES_pd)
 	pypy -m cProfile -o $(PRED_CPROFILE_FOLDER)/$@  ../../../simulation/pyss/src/run_predictor.py $(SWF_FOLDER)/$(SWF_FILE) $< $(DRY_PREDICTION_FOLDER)/$(patsubst %.pd,%,$@) $(MEASUREMENTS_FOLDER)/$(patsubst %.pd,%,$@) $(COEFFS_FOLDER)/$(patsubst %.pd,%,$@)
 
 #_______________DRY PREDICTION ANALYSIS__________:
-prediction_analysis: mae mse rec rec_abs cdfs kde kde_indiv 
+prediction_analysis: mae mse rec rec_abs cdfs kde kde_indiv
 #prediction_analysis: mae mse rec rec_abs customloss cdfs kde kde_indiv loss_average
 
 
@@ -81,25 +81,33 @@ rec_abs:
 cdfs:
 	../../../prediction_analysis/compare_cdfs.R $(DRY_PREDICTION_FOLDER)/clairvoyant $(TERMINATED_JOBS_FP) -o $(ANALYSIS_FOLDER)/compare_cdfs.pdf -r 2
 kde:
-	../../../prediction_analysis/KDE.R $(DRY_PREDICTION_FOLDER)/clairvoyant $(KDE_FILES) -o $(ANALYSIS_FOLDER)/KDE.pdf -r 4
+	../../../prediction_analysis/KDE.R $(DRY_PREDICTION_FOLDER)/clairvoyant $(KDE_FILES) -o $(ANALYSIS_FOLDER)/KDE.pdf -r 2
 kde_indiv:
 	../../../prediction_analysis/KDE_indiv.R $(DRY_PREDICTION_FOLDER)/clairvoyant  $(KDE_FILES) -o $(ANALYSIS_FOLDER)/KDE_indiv.pdf -r 4
 #loss_average:
 	#../../data_manipulation/average_all $(MEASUREMENTS_FOLDER)/ $(MEASUREMENTS_FOLDER)/
 
 #___________SIMULATION_ANALYSIS__:
-simulation_analysis: simu_stretch simu_metrics
+#simulation_analysis: simu_stretch simu_metrics
+metrics_draw:
+	bash ../../../simulation_analysis/metrics_draw.sh
 
-simu_stretch:
-	../../../simulation_analysis/swf2vis_stretchCDF_KDE.R $(ALL_SIMULATION_RESULTS)  -o $(SIM_ANALYSIS_FOLDER)/stretch.pdf -r 2
+metrics_rank:
+	bash ../../../simulation_analysis/metrics_ranking.sh
 
-simu_metrics:
-	../../../simulation_analysis/swf2vis_metrics.R $(ALL_SIMULATION_RESULTS) -o $(SIM_ANALYSIS_FOLDER)/metrics
+metrics_misc:
+	bash ../../../simulation_analysis/metrics_misc.sh
 
-simu_allmetrics: simu_metrics_sort_avgbsld simu_metrics_sort_avgstretch simu_metrics_sort_RMSBSLD simu_metrics_sort_RMSS
+#simu_stretch:
+	#../../../simulation_analysis/swf2vis_stretchCDF_KDE.R $(ALL_SIMULATION_RESULTS)  -o $(SIM_ANALYSIS_FOLDER)/stretch.pdf -r 2
 
-simu_metrics_sort_%:simu_metrics
-	../../data_manipulation/$@  $(SIM_ANALYSIS_FOLDER)/metrics >$(SIM_ANALYSIS_FOLDER)/$@
+#simu_metrics:
+	#../../../simulation_analysis/swf2vis_metrics.R $(ALL_SIMULATION_RESULTS) -o $(SIM_ANALYSIS_FOLDER)/metrics
+
+#simu_allmetrics: simu_metrics_sort_avgbsld simu_metrics_sort_avgstretch simu_metrics_sort_RMSBSLD simu_metrics_sort_RMSS
+
+#simu_metrics_sort_%:simu_metrics
+	#../../data_manipulation/$@  $(SIM_ANALYSIS_FOLDER)/metrics >$(SIM_ANALYSIS_FOLDER)/$@
 
 #_____________CLEANING___________:
 clean:
