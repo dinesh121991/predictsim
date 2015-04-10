@@ -33,6 +33,13 @@ parser_common<-function(description,epilog){
 	return(parser)
 }
 
+#parser to load column files.
+parser_flat<-function(description,epilog){
+	parser<-parser_common(description,epilog)
+	parser$add_argument('filenames',nargs='+',metavar='FILE',type='character', help='input file(s).')
+	return(parser)
+}
+
 #parser to load both cgn and swf files.
 parser_swf_cgn<-function(description,epilog){
 	parser<-parser_common(description,epilog)
@@ -56,6 +63,7 @@ parser_pred<-function(description,epilog){
 }
 
 
+
 #parser to load swf files.
 parser_swf<-function(description,epilog){
 	parser<-parser_common(description,epilog)
@@ -66,6 +74,7 @@ parser_swf<-function(description,epilog){
 parser_cli<-function(description,epilog){
 	parser<-ArgumentParser(description=description,epilog=epilog)
 	parser$add_argument('-v', '--verbose', action='store_true', default=FALSE, help='print extra output',dest='verbosity')
+	parser$add_argument('-o', '--output',metavar='FILE',default='',type='character', help='output filename')
 	return(parser)
 }
 parser_cli_swf<-function(description,epilog){
