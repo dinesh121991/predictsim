@@ -92,7 +92,7 @@ setwd(execution_wd)
 
 df<-read.table(args$swf_filename)
 summary(df)
-ranked=df[with(df, order(avgstretch)), ]
+ranked=df[with(df, order(avgbsld)), ]
 #ncut=which(ranked$predictor=="predictor_reqtime" )[1]
 #df<-head(ranked,n=ncut+1)
 
@@ -119,7 +119,7 @@ ranked=df[with(df, order(avgstretch)), ]
 
 #param_vectors=df[, (colnames(df) %in% c("pleftparam","prightparam","pthreshold","pweight","pleftside","prightside","predictor","corrector","scheduler"))]
 
-printable=ranked[, (colnames(ranked) %in% c("scheduler","predictor","corrector","pweight","pleftside","prightside","RMSS","RMSBSLD","avgstretch","pthreshold"))]
+printable=ranked[, (colnames(ranked) %in% c("scheduler","predictor","corrector","pweight","pleftside","prightside","RMSS","RMSBSLD","avgbsld","pthreshold"))]
 #printable=printable[with(printable, order(RMSBSLD)), ]
 #summary(param_vectors)
 #write.table(param_vectors,file="ranked_cut_metrics.csv")
