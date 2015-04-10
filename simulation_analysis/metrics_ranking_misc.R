@@ -91,12 +91,23 @@ setwd(execution_wd)
 #type stuff here.
 
 df<-read.table(args$swf_filename)
+
 ranked=df[with(df, order(RMSBSLD)), ]
 ranked$rank=c(1:nrow(ranked))
 
+write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_ranks',sep=''),row.names=FALSE)
 #print(ranked[1:10,])
-#print(which(ranked$predictor=="predictor_clairvoyant"))
-write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],args$output,row.names=FALSE)
+
+df_sjbf=df[which(df$scheduler=="easy_plus_plus_scheduler"),]
+ranked=df_sjbf[with(df_sjbf, order(RMSBSLD)), ]
+ranked$rank=c(1:nrow(ranked))
+write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_rank_sjbf',sep=''),row.names=FALSE)
+
+df_sjbf=df[which(df$scheduler=="easy_prediction_backfill_scheduler"),]
+ranked=df_sjbf[with(df_sjbf, order(RMSBSLD)), ]
+ranked$rank=c(1:nrow(ranked))
+write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_rank_fcbf',sep=''),row.names=FALSE)
+
 
 ###################END BLOCK#####################
 

@@ -1,11 +1,6 @@
 #in an experiments folder,
 rm sim_analysis/misc
-rm sim_analysis/clairvoyant_ranks
-rm sim_analysis/clairvoyant_rank_among_sjbf
-rm sim_analysis/clairvoyant_rank_among_fcbf
-
-../../../simulation_analysis/metrics_ranking_misc.R sim_analysis/metrics_complete -o sim_analysis
-
+../../../simulation_analysis/metrics_ranking_misc.R sim_analysis/metrics_complete -o sim_analysis/clairvoyant_ranks
 echo "Clairvoyant ranks" >> sim_analysis/misc
 cat sim_analysis/clairvoyant_ranks|column -s' ' -t  >> sim_analysis/misc
 

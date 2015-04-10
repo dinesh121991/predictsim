@@ -162,7 +162,9 @@ draw_curve<-function(row,rank){
     ylab("Loss")+
     annotate("text",x=0,y=5*ylim/10,label=paste("scheduler:",scheduler),colour="blue")+
     annotate("text",x=0,y=5.5*ylim/10,label=paste("corrector:",row$corrector),colour="black")+
-    annotate("text",x=0,y=6*ylim/10,label=paste("weight:",row$pweight),colour="black")
+    annotate("text",x=0,y=6*ylim/10,label=paste("weight:",row$pweight),colour="black")+
+    annotate("text",x=-3*xlim/4,y=8*ylim/10,label="underprediction\n may delay reservation",colour="blue")+
+    annotate("text",x=3*xlim/4,y=8*ylim/10,label="overprediction\n no reservation delay",colour="blue")
 
   }
   print(p)
