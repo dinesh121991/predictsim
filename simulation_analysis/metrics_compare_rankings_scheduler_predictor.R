@@ -73,7 +73,7 @@ rm(parser,rfold,userfiles)
 #####################OUTPUT_MANAGEMENT###########
 ################MODIFY IF NEEDED####################
 source('Rscript/output_management.R')
-#options_vector=set_output(args$device,args$output,args$ratio,execution_wd)
+options_vector=set_output(args$device,args$output,args$ratio,execution_wd)
 ###################END BLOCK#####################
 
 
@@ -93,19 +93,26 @@ setwd(execution_wd)
 require("ggplot2")
 
 #print(args)
-df<-read.table(args$filenames[1])
+df1<-read.table(args$filenames[1])
 df2<-read.table(args$filenames[2])
-summary(df)
+#summary(df)
 
-df  =  df[,!(colnames(df)  %in% c("name","RMSBSLD"))]
-df2 = df2[,!(colnames(df2) %in% c("name","RMSBSLD"))]
+df1 = df1[,(colnames(df1) %in% c("name","RMSBSLD","predictor","scheduler"))]
+df2 = df2[,(colnames(df2) %in% c("name","RMSBSLD"))]
+result=merge(df1, df2, by="name")
+summary(result)
 
-ranked  =  df[with(df, order("name")), ]
-ranked2 = df2[with(df2, order("name")), ]
+p=ggplot(result, aes(x=RMSBSLD.x,y=RMSBSLD.y))+
+geom_point(aes(colour=factor(predictor),shape=factor(scheduler)))+
+xlab(paste("RMSBSLD for ",args$filenames[1]))+
+ylab(paste("RMSBSLD for ",args$filenames[2]))+
+ggtitle("oeu")+
+scale_colour_grey()
 
-# do a... JOIN! :)
-
-plot()
+print(p)
+#stat_function(fun=lossfunc) +
+#xlab("Prediction error")+
+#ylab("Loss")+
 
 #summary(df)
 #ranked=df[with(df, order(RMSBSLD)), ]
