@@ -61,7 +61,7 @@ verb(args,"Parameters to the script")
 setwd(rfold)
 rfold_wd=getwd()
 for (filename in userfiles) {
-	source(filename)
+  source(filename)
 }
 
 
@@ -91,6 +91,7 @@ setwd(execution_wd)
 #type stuff here.
 
 df<-read.table(args$swf_filename)
+summary(df)
 
 ranked=df[with(df, order(RMSBSLD)), ]
 ranked$rank=c(1:nrow(ranked))
@@ -108,6 +109,19 @@ ranked=df_sjbf[with(df_sjbf, order(RMSBSLD)), ]
 ranked$rank=c(1:nrow(ranked))
 write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_rank_fcbf',sep=''),row.names=FALSE)
 
+
+
+write.table(df[
+            which(
+                         (df$scheduler=="easy_prediction_backfill_scheduler" &
+                          df$predictor=="predictor_reqtime")|
+                         (df$scheduler=="easy_plus_plus_scheduler" &
+                          df$predictor=="predictor_tsafrir" &
+                          df$corrector=="tsafrir")
+                         )
+,(colnames(df) %in% 
+  c("rank","scheduler","corrector","predictor","RMSS","RMSBSLD","avgbsld"))
+],paste(args$output,'/','table_intro',sep=''),row.names=FALSE)
 
 ###################END BLOCK#####################
 

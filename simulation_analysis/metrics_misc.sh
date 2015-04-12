@@ -15,4 +15,7 @@ cat sim_analysis/clairvoyant_rank_sjbf|column -s' ' -t  >> sim_analysis/misc
 echo "Clairvoyant rank AMONG FCBF" >> sim_analysis/misc
 cat sim_analysis/clairvoyant_rank_fcbf|column -s' ' -t  >> sim_analysis/misc
 
+echo "Summary" >> sim_analysis/misc
+cat sim_analysis/table_intro|column -s' ' -t  >> sim_analysis/misc
+
 cat sim_analysis/misc | less -#2 -N -S

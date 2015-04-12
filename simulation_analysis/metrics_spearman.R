@@ -73,7 +73,7 @@ rm(parser,rfold,userfiles)
 #####################OUTPUT_MANAGEMENT###########
 ################MODIFY IF NEEDED####################
 source('Rscript/output_management.R')
-options_vector=set_output(args$device,args$output,1.5,execution_wd)
+options_vector=set_output(args$device,args$output,args$ratio,execution_wd)
 ###################END BLOCK#####################
 
 
@@ -97,26 +97,21 @@ df1<-read.table(args$filenames[1])
 df2<-read.table(args$filenames[2])
 #summary(df)
 
-df1 = df1[,(colnames(df1) %in% c("name","RMSBSLD","predictor","scheduler"))]
+df1 = df1[,(colnames(df1) %in% c("name","RMSBSLD"))]
 df2 = df2[,(colnames(df2) %in% c("name","RMSBSLD"))]
 result=merge(df1, df2, by="name")
-result=result[which(!is.na(result$RMSBSLD.x) & !is.na(result$RMSBSLD.y) & !result$predictor=="easy_backfill" & !result$predictor=="easy_backfill"),]
-summary(result)
+c=cor.coeff = cor(df1$RMSBSD.x , df1$RMSBSD.y , method = "spearman")
+print(c)
+#summary(result)
 
-csp = cor(result$RMSBSLD.x , result$RMSBSLD.y  , method = "spearman")
+#p=ggplot(result, aes(x=RMSBSLD.x,y=RMSBSLD.y))+
+#geom_point(aes(colour=factor(predictor),shape=factor(scheduler)))+
+#xlab(paste("RMSBSLD for ",args$filenames[1]))+
+#ylab(paste("RMSBSLD for ",args$filenames[2]))+
+#ggtitle("oeu")+
+#scale_colour_grey()
 
-xlim=max(result$RMSBSLD.x)
-ylim=max(result$RMSBSLD.y)
-p=ggplot(result, aes(x=RMSBSLD.x,y=RMSBSLD.y))+
-geom_point(aes(colour=factor(scheduler),shape=factor(predictor)))+
-xlab(paste("RMSBSLD for ",args$filenames[1]))+
-annotate("text",x=9*xlim/10,y=9*ylim/10,
-         label=paste("Spearman's CC:",format(csp, digits=4)))+
-ylab(paste("RMSBSLD for ",args$filenames[2]))+
-ggtitle("oeu")+
-scale_colour_grey()
-
-print(p)
+#print(p)
 ###################END BLOCK#####################
 
 
