@@ -87,41 +87,72 @@ setwd(execution_wd)
 #use it to pause for output.
 #args for retrieving your arguments.
 
-
-#type stuff here.
-
+#########
+#ranking
 df<-read.table(args$swf_filename)
-summary(df)
-
+df=df[which(!is.na(df$RMSBSLD)),]
+#summary(df)
 ranked=df[with(df, order(RMSBSLD)), ]
 ranked$rank=c(1:nrow(ranked))
 
-write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_ranks',sep=''),row.names=FALSE)
-#print(ranked[1:10,])
 
-df_sjbf=df[which(df$scheduler=="easy_plus_plus_scheduler"),]
-ranked=df_sjbf[with(df_sjbf, order(RMSBSLD)), ]
-ranked$rank=c(1:nrow(ranked))
-write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_rank_sjbf',sep=''),row.names=FALSE)
+pretty <- function (rmsbslds,ranks) {
+  r=rep(1,length(rmsbslds))
+  for (i in 1:length(rmsbslds)) {
+    r[i]=paste(format(rmsbslds[i],nsmall=1,digits=0),'/',ranks[i],sep="")
+  }
+  return(r)
+}
 
-df_sjbf=df[which(df$scheduler=="easy_prediction_backfill_scheduler"),]
-ranked=df_sjbf[with(df_sjbf, order(RMSBSLD)), ]
-ranked$rank=c(1:nrow(ranked))
-write.table(ranked[which(ranked$predictor=="predictor_clairvoyant"),(colnames(ranked) %in% c("rank","scheduler","RMSS","RMSBSLD","avgbsld"))],paste(args$output,'/','clairvoyant_rank_fcbf',sep=''),row.names=FALSE)
+########
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+T1=ranked[which(
+                (ranked$scheduler=="easy_prediction_backfill_scheduler" &
+                 ranked$predictor=="predictor_reqtime")|
+                (ranked$scheduler=="easy_plus_plus_scheduler" &
+                 ranked$predictor=="predictor_tsafrir" &
+                 ranked$corrector=="tsafrir") |
+                (ranked$predictor=="predictor_clairvoyant")
+                ),
+(colnames(ranked) %in% c("rank","scheduler","corrector","predictor","RMSS","RMSBSLD","avgbsld"))]
+T1$PRETTY=pretty(T1$RMSBSLD,T1$rank)
+write.table(T1,paste(args$output,'/','table_intro',sep=''),row.names=FALSE)
 
+#########
+#Algo-wise ranks of the clairvoyant schedulers
+filtered=ranked[which(ranked$scheduler=="easy_plus_plus_scheduler"),]
+filtered$algo_rank=c(1:nrow(filtered))
+T2=filtered[which(filtered$predictor=="predictor_clairvoyant")
+            ,(colnames(filtered) %in% c("rank","algo_rank","scheduler","RMSS","RMSBSLD","avgbsld"))]
+T2$PRETTY=pretty(T2$RMSBSLD,T2$rank)
+write.table(T2,paste(args$output,'/','clairvoyant_rank_sjbf',sep=''),row.names=FALSE)
 
+filtered=ranked[which(ranked$scheduler=="easy_prediction_backfill_scheduler"),]
+filtered$algo_rank=c(1:nrow(filtered))
+T3=filtered[which(filtered$predictor=="predictor_clairvoyant")
+            ,(colnames(filtered) %in% c("rank","algo_rank","scheduler","RMSS","RMSBSLD","avgbsld"))]
+T3$PRETTY=pretty(T3$RMSBSLD,T3$rank)
+write.table(T3,paste(args$output,'/','clairvoyant_rank_fcfs',sep=''),row.names=FALSE)
 
-write.table(df[
-            which(
-                         (df$scheduler=="easy_prediction_backfill_scheduler" &
-                          df$predictor=="predictor_reqtime")|
-                         (df$scheduler=="easy_plus_plus_scheduler" &
-                          df$predictor=="predictor_tsafrir" &
-                          df$corrector=="tsafrir")
-                         )
-,(colnames(df) %in% 
-  c("rank","scheduler","corrector","predictor","RMSS","RMSBSLD","avgbsld"))
-],paste(args$output,'/','table_intro',sep=''),row.names=FALSE)
+#########
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+filtered=ranked[which(ranked$scheduler=="easy_plus_plus_scheduler"),]
+filtered$algo_rank=c(1:nrow(filtered))
+filtered2=filtered[which(filtered$predictor=="predictor_sgdlinear"),]
+T4=filtered2[c(1,nrow(filtered2))
+            ,(colnames(filtered) %in% c("algo_rank","rank","scheduler","predictor","RMSS","RMSBSLD","avgbsld"))]
+
+T4$PRETTY=pretty(T4$RMSBSLD,T4$rank)
+write.table(T4,paste(args$output,'/','learning_ranks_sjbf',sep=''),row.names=FALSE)
+
+filtered=ranked[which(ranked$scheduler=="easy_prediction_backfill_scheduler"),]
+filtered$algo_rank=c(1:nrow(filtered))
+filtered2=filtered[which(filtered$predictor=="predictor_sgdlinear"),]
+T5=filtered2[c(1,nrow(filtered2))
+            ,(colnames(filtered) %in% c("algo_rank","rank","scheduler","predictor","RMSS","RMSBSLD","avgbsld"))]
+T5$PRETTY=pretty(T5$RMSBSLD,T5$rank)
+write.table(T5,paste(args$output,'/','learning_ranks_fcfs',sep=''),row.names=FALSE)
+
 
 ###################END BLOCK#####################
 
