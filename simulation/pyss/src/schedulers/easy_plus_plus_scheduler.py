@@ -51,7 +51,7 @@ class  EasyPlusPlusScheduler(Scheduler):
 
 
     def new_events_on_job_under_prediction(self, job, current_time):
-        assert job.predicted_run_time <= job.user_estimated_run_time
+        pass #assert job.predicted_run_time <= job.user_estimated_run_time
 
         if not hasattr(job,"num_underpredict"):
             job.num_underpredict = 0

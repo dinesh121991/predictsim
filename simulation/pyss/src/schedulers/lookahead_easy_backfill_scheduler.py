@@ -54,7 +54,7 @@ class LookAheadEasyBackFillScheduler(EasyBackfillScheduler):
 
 
     def _mark_jobs_in_look_ahead_best_order(self, current_time):
-        assert self.cpu_snapshot.slices[0].start_time == current_time
+        pass #assert self.cpu_snapshot.slices[0].start_time == current_time
 
         free_processors = self.cpu_snapshot.free_processors_available_at(current_time)
         first_job = self.unscheduled_jobs[0]
@@ -70,7 +70,7 @@ class LookAheadEasyBackFillScheduler(EasyBackfillScheduler):
 
         for j in range(len(self.unscheduled_jobs)):
             job = self.unscheduled_jobs[j]
-            assert job.backfill_flag == 0 
+            pass #assert job.backfill_flag == 0 
             for k in range(free_processors + 1):
                 M[j, k] = Entry()
                 M[j, k].utilization  =  M[j-1, k].utilization

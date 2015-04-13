@@ -79,10 +79,10 @@ class CpuTimeSlice(object):
     """
 
     def __init__(self, free_processors, start_time, duration, total_processors):
-        assert duration > 0
-        assert start_time >= 0
-        assert total_processors > 0
-        assert 0 <= free_processors <= total_processors
+        pass #assert duration > 0
+        pass #assert start_time >= 0
+        pass #assert total_processors > 0
+        pass #assert 0 <= free_processors <= total_processors
 
         self.total_processors = total_processors
         self.free_processors = free_processors
@@ -110,13 +110,13 @@ class CpuTimeSlice(object):
         return self.total_processors - self.free_processors
 
     def addJob(self, job):
-        assert job.num_required_processors <= self.free_processors, job
-        assert job.id not in self.job_ids, "job.id = "+str(job.id)+", job_ids "+str(self.job_ids)
+        pass #assert job.num_required_processors <= self.free_processors, job
+        pass #assert job.id not in self.job_ids, "job.id = "+str(job.id)+", job_ids "+str(self.job_ids)
         self.free_processors -= job.num_required_processors
         self.job_ids.add(job.id)
 
     def delJob(self, job):
-        assert job.num_required_processors <= self.busy_processors, job
+        pass #assert job.num_required_processors <= self.busy_processors, job
         self.free_processors += job.num_required_processors
         self.job_ids.remove(job.id)
 
@@ -170,7 +170,7 @@ class CpuSnapshot(object):
         
     @property
     def snapshot_end_time(self):
-        assert len(self.slices) > 0
+        pass #assert len(self.slices) > 0
         return self.slices[-1].end_time
 
 
@@ -207,7 +207,7 @@ class CpuSnapshot(object):
         if start_time > self.snapshot_end_time:
             # add slice until start_time
             self._append_time_slice(self.total_processors, start_time - self.snapshot_end_time)
-            assert self.snapshot_end_time == start_time
+            pass #assert self.snapshot_end_time == start_time
 
 	# add a tail slice, duration is arbitrary whenever start_time >= self.snapshot_end_time
 	self._append_time_slice(self.total_processors, 1000)
@@ -223,13 +223,13 @@ class CpuSnapshot(object):
         return False # no slice found
 
     def _slice_index_to_split(self, split_time):
-        assert not self._slice_starts_at(split_time)
+        pass #assert not self._slice_starts_at(split_time)
 
         for index, slice in enumerate(self.slices):
             if slice.start_time < split_time < slice.end_time:
                 return index
 
-        assert False # should never reach here
+        pass #assert False # should never reach here
 
 
     def _append_time_slice(self, free_processors, duration):
@@ -253,7 +253,7 @@ class CpuSnapshot(object):
         """
         Do the same that jobEarliestAssignment, but force the start to current_time
         """
-        assert job.num_required_processors <= self.total_processors, str(self.total_processors)
+        pass #assert job.num_required_processors <= self.total_processors, str(self.total_processors)
         time = current_time
 
         self._append_time_slice(self.total_processors, time + job.predicted_run_time + 1)
@@ -261,7 +261,7 @@ class CpuSnapshot(object):
         partially_assigned = False
         tentative_start_time = accumulated_duration = 0
 
-        assert time >= 0
+        pass #assert time >= 0
 
         for s in self.slices: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
             #reach the current_time
@@ -287,7 +287,7 @@ class CpuSnapshot(object):
                 self.slices[-1].updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
                 return True
 
-        assert False # should never reach here
+        pass #assert False # should never reach here
 
     def jobEarliestAssignment(self, job, time):
         """
@@ -296,14 +296,14 @@ class CpuSnapshot(object):
         times in an uninterrupted fashion.
         Assumptions: the given is greater than the submission time of the job >= 0.
         """
-        assert job.num_required_processors <= self.total_processors, str(self.total_processors)
+        pass #assert job.num_required_processors <= self.total_processors, str(self.total_processors)
 
         self._append_time_slice(self.total_processors, time + job.predicted_run_time + 1)
 
         partially_assigned = False
         tentative_start_time = accumulated_duration = 0
 
-        assert time >= 0
+        pass #assert time >= 0
 
         for s in self.slices: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
             if s.end_time <= time or s.free_processors < job.num_required_processors:
@@ -326,12 +326,12 @@ class CpuSnapshot(object):
                 self.slices[-1].updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
                 return tentative_start_time
 
-        assert False # should never reach here
+        pass #assert False # should never reach here
 
 
     def _slices_time_range(self, start, end):
-        assert self._slice_starts_at(start), "start time is: " + str(start) 
-        assert self._slice_starts_at(end), "end time is: " + str(end)
+        pass #assert self._slice_starts_at(start), "start time is: " + str(start) 
+        pass #assert self._slice_starts_at(end), "end time is: " + str(end)
         
 	for s in self.slices:
 		st = s.start_time
@@ -368,7 +368,7 @@ class CpuSnapshot(object):
 	This function extends the duration of a job, if the predicted duration is smaller
 	than the user estimated duration, then the function adds more slices to the job accordingly.
 	"""
-	assert isinstance(new_predicted_run_time, int)
+	pass #assert isinstance(new_predicted_run_time, int)
 	job_estimated_finish_time = job.start_to_run_at_time + new_predicted_run_time
         self._ensure_a_slice_starts_at(job_estimated_finish_time)
         for s in self._slices_time_range(job.predicted_finish_time, job_estimated_finish_time):
@@ -388,7 +388,7 @@ class CpuSnapshot(object):
         assigns the job to start at the given job_start time.
         Important assumption: job_start was returned by jobEarliestAssignment.
         """
-        assert job.predicted_run_time > 0
+        pass #assert job.predicted_run_time > 0
         job.start_to_run_at_time = job_start
         self._ensure_a_slice_starts_at(job_start)
         self._ensure_a_slice_starts_at(job.predicted_finish_time)
@@ -401,7 +401,7 @@ class CpuSnapshot(object):
 
 
     def archive_old_slices(self, current_time):
-        assert self.slices
+        pass #assert self.slices
 	self.unify_slices()
         self._ensure_a_slice_starts_at(current_time)
 
@@ -418,7 +418,7 @@ class CpuSnapshot(object):
 	
        
     def unify_slices(self):
-        assert self.slices
+        pass #assert self.slices
 
         # optimization
 	if len(self.slices) < 10:
@@ -427,7 +427,7 @@ class CpuSnapshot(object):
         prev = self.slices[0]
         # use a copy so we don't change the container while iterating over it
         for s in list_copy(self.slices[1: ]):
-	    assert s.start_time == prev.start_time + prev.duration
+	    pass #assert s.start_time == prev.start_time + prev.duration
             if s.free_processors == prev.free_processors and s.job_ids == prev.job_ids:
                 prev.updateDuration( prev.duration + s.duration)
                 self.slices.remove(s)

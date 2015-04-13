@@ -23,7 +23,7 @@ class  ShrinkingEasyScheduler(EasyBackfillScheduler):
         return super(ShrinkingEasyScheduler, self).new_events_on_job_submission(job, current_time)
 
     def new_events_on_job_under_prediction(self, job, current_time):
-        assert job.predicted_run_time <= job.user_estimated_run_time
+        pass #assert job.predicted_run_time <= job.user_estimated_run_time
         new_predicted_run_time = common_correctors.reqtime(job, current_time)
         self.cpu_snapshot.assignTailofJobToTheCpuSlices(job, new_predicted_run_time)
         job.predicted_run_time = new_predicted_run_time

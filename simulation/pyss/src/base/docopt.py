@@ -49,7 +49,7 @@ class Pattern(object):
         uniq = list(set(self.flat())) if uniq is None else uniq
         for i, child in enumerate(self.children):
             if not hasattr(child, 'children'):
-                assert child in uniq
+                pass #assert child in uniq
                 self.children[i] = uniq[uniq.index(child)]
             else:
                 child.fix_identities(uniq)
@@ -180,7 +180,7 @@ class Command(Argument):
 class Option(LeafPattern):
 
     def __init__(self, short=None, long=None, argcount=0, value=False):
-        assert argcount in (0, 1)
+        pass #assert argcount in (0, 1)
         self.short, self.long, self.argcount = short, long, argcount
         self.value = None if value is False and argcount else value
 
@@ -246,7 +246,7 @@ class OptionsShortcut(Optional):
 class OneOrMore(BranchPattern):
 
     def match(self, left, collected=None):
-        assert len(self.children) == 1
+        pass #assert len(self.children) == 1
         collected = [] if collected is None else collected
         l = left
         c = collected
@@ -301,7 +301,7 @@ class Tokens(list):
 def parse_long(tokens, options):
     """long ::= '--' chars [ ( ' ' | '=' ) chars ] ;"""
     long, eq, value = tokens.move().partition('=')
-    assert long.startswith('--')
+    pass #assert long.startswith('--')
     value = None if eq == value == '' else value
     similar = [o for o in options if o.long == long]
     if tokens.error is DocoptExit and similar == []:  # if no exact match
@@ -334,7 +334,7 @@ def parse_long(tokens, options):
 def parse_shorts(tokens, options):
     """shorts ::= '-' ( chars )* [ [ ' ' ] chars ] ;"""
     token = tokens.move()
-    assert token.startswith('-') and not token.startswith('--')
+    pass #assert token.startswith('-') and not token.startswith('--')
     left = token.lstrip('-')
     parsed = []
     while left != '':
