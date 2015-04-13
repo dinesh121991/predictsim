@@ -68,21 +68,21 @@ class Simulator(object):
 		self.pbari=1
 
     def handle_submission_event(self, event):
-        assert isinstance(event, JobSubmissionEvent)
+        pass #assert isinstance(event, JobSubmissionEvent)
         self.time_of_last_job_submission = event.timestamp
         newEvents = self.scheduler.new_events_on_job_submission(event.job, event.timestamp)
         for event in newEvents:
             self.event_queue.add_event(event)
 
     def handle_termination_event(self, event):
-        assert isinstance(event, JobTerminationEvent)
+        pass #assert isinstance(event, JobTerminationEvent)
         newEvents = self.scheduler.new_events_on_job_termination(event.job, event.timestamp)
         self.terminated_jobs.append(event.job)
         for event in newEvents:
             self.event_queue.add_event(event)
 
     def store_terminated_job(self, event):
-        assert isinstance(event, JobTerminationEvent)
+        pass #assert isinstance(event, JobTerminationEvent)
         outl = []
 
         #1. Job Number
@@ -138,7 +138,7 @@ class Simulator(object):
 
 
     def handle_prediction_event(self, event):
-        assert isinstance(event, JobPredictionIsOverEvent)
+        pass #assert isinstance(event, JobPredictionIsOverEvent)
         newEvents = self.scheduler.new_events_on_job_under_prediction(event.job, event.timestamp)
         for event in newEvents:
             self.event_queue.add_event(event)
@@ -176,7 +176,7 @@ by_bounded_slow_down_sort_key = (
 
 
 def print_statistics(jobs, time_of_last_job_submission):
-    assert jobs is not None, "Input file is probably empty."
+    pass #assert jobs is not None, "Input file is probably empty."
 
     sum_waits     = 0
     sum_run_times = 0
