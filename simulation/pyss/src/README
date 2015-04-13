@@ -167,3 +167,10 @@ Scheduler: <class 'schedulers.easy_plus_plus_scheduler.EasyPlusPlusScheduler'>
 
 
 df2gantt(swf_read('../../simulation/pyss/src/res.swf'))
+
+
+
+
+*** To remove assert I did :
+for i in schedulers/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
+for i in base/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
