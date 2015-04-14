@@ -458,133 +458,8 @@ def action_sql(cmd):
 	conn.commit()
 
 
-def unnice(s):
-	
-	s = s.split("/")[-1]
-	s = s.rstrip(".out")
-	s = s.rstrip(".gz")
-	s = s.rstrip(".swf")
-
-	ss = s.split("_")
-	tttt = [len(x) for x in ss]
-	opt_index = tttt.index(max(tttt))
-
-	sched = '_'.join(ss[1:opt_index])
-	corrector = "_".join(ss[opt_index+1:len(ss)])
-	o = ss[opt_index]
-
-	ks = ['loss', 'weight', 'cubic', 'eta', 'threshold', 'rightside', 'rightparam', 'quadratic', 'leftside', 'leftparam']
-
-	a = [(o.find(x), x) for x in ks]
-	a.sort()
-	t = o.lstrip(a[0][1])
-	opt = {"name":"predictor_sgdlinear",
-		"max_cores":"auto",
-		"eta":5000,
-		"loss":"composite",
-		"quadratic":True,
-		"cubic": False,
-		"gd": "NAG",
-		"regularization":"l2",
-		"lambda":4000000000}
-
-	for i in range(1, len(a)):
-		tt = t.split(a[i][1])
-		opt[a[i-1][1]] = tt[0].strip('gdl')
-		t = a[i][1].join(tt[1:len(tt)])
-
-	opt[a[len(a)-1][1]] = t.strip('gdl')
-
-	weightnice={"1":"1",
-		"5+logrm":"5+log(r/m)",
-		"5+logmr":"5+log(m/r)",
-		"11+log1r*m":"11+log(1/(r*m))",
-		"1+logm*r":"1+log(m*r)"
-		}
-	if opt["weight"] != "":
-		opt["weight"] = weightnice[opt["weight"]]
-	
-		opt["threshold"] = int(opt["threshold"])
-		opt["leftparam"] = float(opt["leftparam"])
-		if opt["leftparam"] >= 1:
-			opt["leftparam"] = int(opt["leftparam"])
-		opt["rightparam"] = float(opt["rightparam"])
-		if opt["rightparam"] >= 1:
-			opt["rightparam"] = int(opt["rightparam"])
-		opt["eta"] = int(opt["eta"])
-
-	finalopt = {'output_swf': 'res.swf',
-		'num_processors': 80640,
-		'input_file': '../../../experiments/data/CEA-curie_sample/swf/log.swf',
-		'stats': False,
-		'scheduler': {'corrector': {'name': corrector},
-			'progressbar': False,
-			'name': sched,
-			'predictor': opt}}
-
-	return finalopt
-
-
-def ascii_encode(x):
-	if isinstance(x, unicode):
-		return x.encode('ascii')
-	return x
-
-def ascii_encode_dict(data):
-    return dict(map(ascii_encode, pair) for pair in data.items())
-
-def action_nice(opts):
-	#print type(opts)
-	opt = json.loads(opts, object_hook=ascii_encode_dict)
-	s = opt["scheduler"]
-	print ouput_dir+"res_"+s["name"]+"_"+nice(str(s["predictor"]).encode('ascii'))+"_"+nice(str(s["corrector"]).encode('ascii'))+".swf.gz"
-
-
-def init_db_curie():
-	#limit = 10
-	res = {}
-	ouput_dirSAVE = "../../../experiments/data/CEA-curie/simulations_SAVE/"
-	for file in glob.glob(ouput_dirSAVE+"*.gz"):
-		#print "#############################"
-		#print(file)
-		#print "---------------------------"
-		try:
-			opt = filename2opt(file)
-		except:
-			opt = unnice(file)
-		#print opt
-		#print "---------------------------"
-		#print ouput_dir+opt2filename(opt)
-		#print opt2hash(opt)
-		fro=file
-		too=ouput_dir+opt2filename(opt)
-		#print fro
-		#print too
-		
-		os.system("cp \""+fro+"\" \""+too+"\"")
-		'''res[hash] = {
-			"outfile":file,
-			"swffile": xx,
-			"oldformat": True,
-			"hash":hash,
-			"comptime": 12,
-			"state":xx
-			}'''
-		
-		
-		
-		#limit -= 1
-		#if limit == 0:
-			#break
-	
-	
-	
-	return
-
-	
-	
-	
-
+def action_unnice(s):
+	print filename2opt(s)
 
 
 
@@ -623,7 +498,7 @@ def usage():
 		
 		run_valexpe_server.py SQL "SQL statement"
 		
-		run_valexpe_server.py init_db_curie
+		run_valexpe_server.py unnice path/to/expe.swf.gz
 	""")
 	exit(0)
 
@@ -677,8 +552,11 @@ elif action == "SQL":
 		action_sql(sys.argv[2])
 	else:
 		usage()
-elif action == "init_db_curie":
-	init_db_curie()
+elif action == "unnice":
+	if len(sys.argv) == 3:
+		action_unnice(sys.argv[2])
+	else:
+		usage()
 else:
 	print("not an  action")
 	usage()
