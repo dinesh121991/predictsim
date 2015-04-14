@@ -106,11 +106,33 @@ b.doTask(
 b.doTask(
 	source=["sim_analysis/individual/", ".csv"], dest="sim_analysis/metrics",
 	command="../../data_manipulation/merge_to_metrics.sh $SOURCE > $DEST_FILE")
-
 b.doTask(
 	source="sim_analysis/metrics", dest="sim_analysis/metrics_complete",
 	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis/metrics' > $DEST_FILE")
 
+print subprocess.check_output("mkdir sim_analysis_after3w", shell=True)
+print subprocess.check_output("mkdir sim_analysis_after3w/individual/", shell=True)
+b.doTask(
+	source=["simulations/", ".swf.gz"], dest=["sim_analysis_after3w/individual/", ".csv"],
+	command="""../../../simulation_analysis/swf2vis_metrics_after3w.R $SOURCE_FILE -o $DEST_FILE""")
+b.doTask(
+	source=["sim_analysis_after3w/individual/", ".csv"], dest="sim_analysis_after3w/metrics",
+	command="../../data_manipulation/merge_to_metrics.sh $SOURCE > $DEST_FILE")
+b.doTask(
+	source="sim_analysis_after3w/metrics", dest="sim_analysis_after3w/metrics_complete",
+	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_after3w/metrics' > $DEST_FILE")
+
+print subprocess.check_output("mkdir sim_analysis_first3w", shell=True)
+print subprocess.check_output("mkdir sim_analysis_first3w/individual/", shell=True)
+b.doTask(
+	source=["simulations/", ".swf.gz"], dest=["sim_analysis_first3w/individual/", ".csv"],
+	command="""../../../simulation_analysis/swf2vis_metrics_first3w.R $SOURCE_FILE -o $DEST_FILE""")
+b.doTask(
+	source=["sim_analysis_first3w/individual/", ".csv"], dest="sim_analysis_first3w/metrics",
+	command="../../data_manipulation/merge_to_metrics.sh $SOURCE > $DEST_FILE")
+b.doTask(
+	source="sim_analysis_first3w/metrics", dest="sim_analysis_first3w/metrics_complete",
+	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_first3w/metrics' > $DEST_FILE")
 
 
 
