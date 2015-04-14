@@ -106,7 +106,7 @@ for (i in 1:length(args$swf_filenames)) {
   }, error= function(e) {
     data.frame(job_id=c(NA), submit_time=c(NA), wait_time=c(NA), run_time=c(NA), proc_alloc=c(NA), cpu_time_used=c(NA), mem_used=c(NA), proc_req=c(NA), time_req=c(NA), mem_req=c(NA), status=c(NA), user_id=c(NA), group_id=c(NA), exec_id=c(NA), queue_id=c(NA), partition_id=c(NA), previous_job_id=c(NA), think_time=c(NA))
   })
-  if(!is.na(data$submit_time))
+  if(!sum(is.na(data$submit_time)))
       data = data[which(data$submit_time > 3*7*24*3600),]
 
 #   data=data[as.integer(floor(nrow(data)*0.01)):nrow(data),]
