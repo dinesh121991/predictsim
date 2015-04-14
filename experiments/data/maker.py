@@ -110,8 +110,10 @@ b.doTask(
 	source="sim_analysis/metrics", dest="sim_analysis/metrics_complete",
 	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis/metrics' > $DEST_FILE")
 
-print subprocess.check_output("mkdir sim_analysis_after3w", shell=True)
-print subprocess.check_output("mkdir sim_analysis_after3w/individual/", shell=True)
+if not os.path.exists("sim_analysis_after3w"):
+	os.makedirs(directory)
+if not os.path.exists("sim_analysis_after3w/individual"):
+	os.makedirs(directory)
 b.doTask(
 	source=["simulations/", ".swf.gz"], dest=["sim_analysis_after3w/individual/", ".csv"],
 	command="""../../../simulation_analysis/swf2vis_metrics_after3w.R $SOURCE_FILE -o $DEST_FILE""")
@@ -122,8 +124,10 @@ b.doTask(
 	source="sim_analysis_after3w/metrics", dest="sim_analysis_after3w/metrics_complete",
 	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_after3w/metrics' > $DEST_FILE")
 
-print subprocess.check_output("mkdir sim_analysis_first3w", shell=True)
-print subprocess.check_output("mkdir sim_analysis_first3w/individual/", shell=True)
+if not os.path.exists("sim_analysis_first3w"):
+	os.makedirs(directory)
+if not os.path.exists("sim_analysis_first3w/individual"):
+	os.makedirs(directory)
 b.doTask(
 	source=["simulations/", ".swf.gz"], dest=["sim_analysis_first3w/individual/", ".csv"],
 	command="""../../../simulation_analysis/swf2vis_metrics_first3w.R $SOURCE_FILE -o $DEST_FILE""")
