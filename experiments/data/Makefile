@@ -1,12 +1,14 @@
 #___________SIMULATION_ANALYSIS__:
 #simulation_analysis: simu_stretch simu_metrics
+FILES=KTH-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete SDSC-BLUE/sim_analysis/metrics_complete
+
 compare_traces:
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R KTH-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_KTH-SP2_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_KTH-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_KTH-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_SDSC-SP2.pdf -r 2
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R  -o analysis/scatter_rankings_scheduler_predictor_KTH-SP2_CTC-SP2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_CTC-SP2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_CTC-SP2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_KTH-SP2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_KTH-SP2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_SDSC-SP2.pdf -r 1
 	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R KTH-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_KTH-SP2_CTC-SP2.pdf -r 2
 	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-SP2_CTC-SP2.pdf -r 2
 	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_CTC-SP2.pdf -r 2
@@ -14,6 +16,9 @@ compare_traces:
 	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_KTH-SP2.pdf -r 2
 	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_SDSC-SP2.pdf -r 2
 	ranger analysis
+
+cross_validate:
+	../../simulation_analysis/metrics_selection_cross_validation.R $(FILES) -o analysis/cross_validation
 
 #_____________CLEANING___________:
 #clean:
