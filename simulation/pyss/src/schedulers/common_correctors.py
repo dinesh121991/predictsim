@@ -21,7 +21,7 @@ def tsafrir(job, current_time):
 	if(not hasattr(job, "number_of_corrections")):
 		job.number_of_corrections = 0
 	time_correction = [0, 60, 60*5, 60*15, 60*30, 3600, 3600*2, 3600*5, 3600*10, 3600*20, 3600*50, 3600*100]
-	if(job.number_of_corrections >= len(time_correction)):
+	if(job.number_of_corrections+1 >= len(time_correction)):
 		print("Corrector Tsafrir: not enough time_correction!")
 		return job.user_estimated_run_time
 	new_predicted_run_time = job.predicted_run_time - time_correction[job.number_of_corrections]
