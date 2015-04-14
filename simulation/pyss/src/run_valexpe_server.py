@@ -9,8 +9,8 @@ import os
 import time
 import glob
 
-expe_name = "CEA-curie"
-num_processors = 80640
+expe_name = "MetaCentrum2013"
+num_processors = 3356
 expe_dir = "../../../experiments/data/"+expe_name
 conn = sqlite3.connect(expe_dir+"/run.db", timeout=120)
 ouput_dir = expe_dir+"/simulations/"
