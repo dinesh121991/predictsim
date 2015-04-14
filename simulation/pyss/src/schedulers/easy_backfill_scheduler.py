@@ -71,7 +71,7 @@ class EasyBackfillScheduler(Scheduler):
         tail_of_waiting_list = list_copy(self.unscheduled_jobs[1:])
         
         first_job = self.unscheduled_jobs[0]
-        self.cpu_snapshot.assignJobEarliest(first_job, current_time)
+        starttime = self.cpu_snapshot.assignJobEarliest(first_job, current_time)
         
         for job in tail_of_waiting_list:
             if self.cpu_snapshot.canJobStartNow(job, current_time):

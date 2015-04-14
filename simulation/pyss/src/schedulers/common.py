@@ -156,6 +156,15 @@ class CpuTimeSlice(object):
         return first, second
 
 
+class CpuTimeSliceList:
+	
+	def __init__(self, obj):
+		self.first = obj
+		self.last = obj
+		obj.list_prev = None
+		obj.list_next = None
+
+
 class CpuSnapshot(object):
     """
     represents the time table with the assignments of jobs to available processors
@@ -163,15 +172,14 @@ class CpuSnapshot(object):
     # Assumption: the snapshot always has at least one slice
     def __init__(self, total_processors, archive_snapshots):
         self.total_processors = total_processors
-        self.slices=[]
-        self.slices.append(CpuTimeSlice(self.total_processors, start_time=0, duration=1000, total_processors=total_processors))
+        self.slices = CpuTimeSliceList( CpuTimeSlice(self.total_processors, start_time=0, duration=1000, total_processors=total_processors))
         self.archive_of_old_slices=[]
         self.archive_snapshots= archive_snapshots
         
     @property
     def snapshot_end_time(self):
         pass #assert len(self.slices) > 0
-        return self.slices[-1].end_time
+        return self.slices.last.end_time
 
 
     def _ensure_a_slice_starts_at(self, start_time):
@@ -196,12 +204,27 @@ class CpuSnapshot(object):
             return # already have one
 
         if start_time < self.snapshot_end_time:
-            # split an existing slice
-            index = self._slice_index_to_split(start_time)
-
-            # splitting slice s with respect to the start time
-            slice = self.slices.pop(index)
-            self.slices[index:index] = slice.split(start_time)
+            cur_slice = self.slices.first
+            while cur_slice != None:
+                 if cur_slice.start_time < start_time < cur_slice.end_time:
+                     (first_slice, second_slice) = cur_slice.split(start_time)
+                     
+                     first_slice.list_prev = cur_slice.list_prev
+                     first_slice.list_next = second_slice
+                     if cur_slice.list_prev == None:
+                          self.slices.first = first_slice
+                     else:
+                          first_slice.list_prev.list_next = first_slice
+                     
+                     second_slice.list_prev = first_slice
+                     second_slice.list_next = cur_slice.list_next
+                     if second_slice.list_next == None:
+                          self.slices.last = second_slice
+                     else:
+                          second_slice.list_next.list_prev = second_slice
+                     return
+                 cur_slice = cur_slice.list_next
+            pass #assert "you should not be there"
             return
 
         if start_time > self.snapshot_end_time:
@@ -214,39 +237,40 @@ class CpuSnapshot(object):
 
 
     def _slice_starts_at(self, time):
-        for slice in self.slices:
-            st = slice.start_time
+        cur_slice = self.slices.first
+        while cur_slice != None:
+            st = cur_slice.start_time
             if st == time:
                 return True
             if st > time:
                 return False
+            cur_slice = cur_slice.list_next
         return False # no slice found
-
-    def _slice_index_to_split(self, split_time):
-        pass #assert not self._slice_starts_at(split_time)
-
-        for index, slice in enumerate(self.slices):
-            if slice.start_time < split_time < slice.end_time:
-                return index
-
-        pass #assert False # should never reach here
 
 
     def _append_time_slice(self, free_processors, duration):
-        self.slices.append(CpuTimeSlice(free_processors, self.snapshot_end_time, duration, self.total_processors))
+        obj = CpuTimeSlice(free_processors, self.snapshot_end_time, duration, self.total_processors)
+        self.slices.last.list_next = obj
+        obj.list_next = None
+        obj.list_prev = self.slices.last
+        self.slices.last = obj
 
 
     def free_processors_available_at(self, time):
-        for s in self.slices:
-            if s.start_time <= time < s.end_time:
-                return s.free_processors
+        cur_slice = self.slices.first
+        while cur_slice != None:
+            if cur_slice.start_time <= time < cur_slice.end_time:
+                return cur_slice.free_processors
+            cur_slice = cur_slice.list_next
         return self.total_processors
 
 
     def jobs_at(self, time):
-        for s in self.slices:
-            if s.start_time <= time < s.end_time:
-                return s.job_ids
+        cur_slice = self.slices.first
+        while cur_slice != None:
+            if cur_slice.start_time <= time < cur_slice.end_time:
+                return cur_slice.job_ids
+            cur_slice = cur_slice.list_next
         return set()
 
     def canJobStartNow(self, job, current_time):
@@ -263,9 +287,11 @@ class CpuSnapshot(object):
 
         pass #assert time >= 0
 
-        for s in self.slices: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
+        s = self.slices.first
+        while s != None: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
             #reach the current_time
             if s.start_time < time:
+                s = s.list_next
                 continue
 
             if s.end_time <= time or s.free_processors < job.num_required_processors:
@@ -284,8 +310,9 @@ class CpuSnapshot(object):
                 accumulated_duration += s.duration
 
             if accumulated_duration >= job.predicted_run_time:
-                self.slices[-1].updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
+                self.slices.last.updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
                 return True
+            s = s.list_next
 
         pass #assert False # should never reach here
 
@@ -302,10 +329,13 @@ class CpuSnapshot(object):
 
         partially_assigned = False
         tentative_start_time = accumulated_duration = 0
+        
+        max_core_available = 0
 
         pass #assert time >= 0
 
-        for s in self.slices: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
+        s = self.slices.first
+        while s != None: # continuity assumption: if t' is the successor of t, then: t' = t + duration_of_slice_t
             if s.end_time <= time or s.free_processors < job.num_required_processors:
                 # the job can't be assigned to this slice, need to reset
                 # partially_assigned and accumulated_duration
@@ -323,8 +353,9 @@ class CpuSnapshot(object):
                 accumulated_duration += s.duration
 
             if accumulated_duration >= job.predicted_run_time:
-                self.slices[-1].updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
+                self.slices.last.updateDuration(1000) # making sure that the last "empty" slice we've just added will not be huge
                 return tentative_start_time
+            s = s.list_next
 
         pass #assert False # should never reach here
 
@@ -333,12 +364,14 @@ class CpuSnapshot(object):
         pass #assert self._slice_starts_at(start), "start time is: " + str(start) 
         pass #assert self._slice_starts_at(end), "end time is: " + str(end)
         
-	for s in self.slices:
+	s = self.slices.first
+	while s != None:
 		st = s.start_time
 		if st >= end:
 			break
 		if start <= st:
 			yield s
+		s = s.list_next
 
 
     def delJobFromCpuSlices(self, job):
@@ -397,46 +430,55 @@ class CpuSnapshot(object):
 	    
 
     def assignJobEarliest(self, job, time):
-        self.assignJob(job, self.jobEarliestAssignment(job, time))
+        starttime = self.jobEarliestAssignment(job, time)
+        self.assignJob(job, starttime)
+        return starttime
 
 
     def archive_old_slices(self, current_time):
         pass #assert self.slices
 	self.unify_slices()
         self._ensure_a_slice_starts_at(current_time)
-
-	size = len(self.slices)
-	while size > 0:
-	    s = self.slices[0]
-            if s.end_time <= current_time:
-                if self.archive_snapshots:
-                    self.archive_of_old_slices.append(s)
-                self.slices.pop(0)
-		size -= 1 
-            else:
-                break
 	
+	while self.slices.first.end_time <= current_time:
+		cur_slice = self.slices.first
+		self.slices.first = cur_slice.list_next
+		self.slices.first.list_prev = None
+		
+		cur_slice.list_prev = None
+		cur_slice.list_next = None
+		if self.archive_snapshots:
+			self.archive_of_old_slices.append(cur_slice)
+		else:
+			del cur_slice
+			
+
        
     def unify_slices(self):
-        pass #assert self.slices
+	pass #assert self.slices
 
-        # optimization
-	if len(self.slices) < 10:
-		return
-
-        prev = self.slices[0]
-        # use a copy so we don't change the container while iterating over it
-        for s in list_copy(self.slices[1: ]):
-	    pass #assert s.start_time == prev.start_time + prev.duration
-            if s.free_processors == prev.free_processors and s.job_ids == prev.job_ids:
-                prev.updateDuration( prev.duration + s.duration)
-                self.slices.remove(s)
-            else:
-                prev = s
+	prev_slice = self.slices.first
+	cur_slice = prev_slice.list_next
+	while cur_slice != None:
+		pass #assert cur_slice.start_time == prev_slice.start_time + prev_slice.duration
+		if cur_slice.free_processors == prev_slice.free_processors and cur_slice.job_ids == prev_slice.job_ids:
+			prev_slice.updateDuration( prev_slice.duration + cur_slice.duration)
+			prev_slice.list_next = cur_slice.list_next
+			if cur_slice == self.slices.last:
+				self.slices.last = prev_slice
+			if cur_slice.list_next != None:
+				cur_slice.list_next.list_prev = prev_slice
+			cur_slice.list_prev = None
+			cur_slice.list_next = None
+			del cur_slice
+		else:
+			prev_slice = cur_slice
+		cur_slice = prev_slice.list_next
 
 
     def _restore_old_slices(self):
         size = len(self.archive_of_old_slices)
+        self.slices = []
         while size > 0:
             size -= 1
             s = self.archive_of_old_slices.pop()
@@ -449,22 +491,29 @@ class CpuSnapshot(object):
 	for s in self.archive_of_old_slices:
 	    print s 
 	print("-----------------------------------------------")
-        for s in self.slices:
+        s = self.slices.first
+        while s != None:
             print s
+            s = s.list_next
         print
+        
+        
 
 
     def copy(self):
+        assert "NOT YET UPDATED"
         result = CpuSnapshot(self.total_processors, self.archive_snapshots)
         result.slices = [slice.copy() for slice in self.slices]
         return result
     
     def quick_copy(self):
+        assert "NOT YET UPDATED"
         result = CpuSnapshot(self.total_processors, self.archive_snapshots)
         result.slices = [slice.quick_copy() for slice in self.slices]
         return result
 
     def CpuSlicesTestFeasibility(self):
+        assert "NOT YET UPDATED"
         self._restore_old_slices()
         duration = 0
         time = 0
@@ -487,6 +536,7 @@ class CpuSnapshot(object):
         return True
 
     def CpuSlicesTestEmptyFeasibility(self):
+        assert "NOT YET UPDATED"
         self._restore_old_slices()
         duration = 0
         time = 0
