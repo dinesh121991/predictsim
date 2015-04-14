@@ -280,7 +280,10 @@ class CpuSnapshot(object):
         pass #assert job.num_required_processors <= self.total_processors, str(self.total_processors)
         time = current_time
 
-        self._append_time_slice(self.total_processors, time + job.predicted_run_time + 1)
+        if self.slices.last.free_processors == self.total_processors:
+            self.slices.last.updateDuration(time + job.predicted_run_time + 1)
+        else:
+            self._append_time_slice(self.total_processors, time + job.predicted_run_time + 1)
 
         partially_assigned = False
         tentative_start_time = accumulated_duration = 0

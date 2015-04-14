@@ -66,19 +66,26 @@ class EasyBackfillScheduler(Scheduler):
             return []
         
         result = []
-
-
         tail_of_waiting_list = list_copy(self.unscheduled_jobs[1:])
-        
         first_job = self.unscheduled_jobs[0]
         starttime = self.cpu_snapshot.assignJobEarliest(first_job, current_time)
         
+        job_max_procs = first_job.num_required_processors
+        job_max_runtime = first_job.predicted_run_time
+        
         for job in tail_of_waiting_list:
+            if job.predicted_run_time >= job_max_runtime and job.num_required_processors >= job_max_procs:
+                 continue
             if self.cpu_snapshot.canJobStartNow(job, current_time):
                 job.is_backfilled = 1
                 self.unscheduled_jobs.remove(job)
                 self.cpu_snapshot.assignJob(job, current_time)
                 result.append(job)
+            else:
+                if job.predicted_run_time <= job_max_runtime and job.num_required_processors <= job_max_procs:
+                    job_max_procs = job.num_required_processors
+                    job_max_runtime = job.predicted_run_time
+        
         self.cpu_snapshot.unAssignJob(first_job)
 
         return result
