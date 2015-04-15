@@ -103,7 +103,9 @@ summary:
 
 metrics_filter:
 	../../../simulation_analysis/metrics_filter.R sim_analysis/metrics_complete -o sim_analysis
+	../../../simulation_analysis/metrics_filter.R sim_analysis_after_50/metrics_complete -o sim_analysis_after_50
+	../../../simulation_analysis/metrics_filter.R sim_analysis_before_50/metrics_complete -o sim_analysis_before_50
 
 metrics_learn:
-	../../../simulation_analysis/metrics_ranking_learn.R sim_analysis_first3wk   -o sim_analysis/metrics_complete/learned_best_rmsbsld
+	../../../simulation_analysis/metrics_ranking_learn.R sim_analysis_before50/metrics_complete sim_analysis_after50/metrics_complete  -o sim_analysis/learned_best_rmsbsld
 
