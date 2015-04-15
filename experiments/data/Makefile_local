@@ -101,49 +101,9 @@ metrics_misc:
 summary:
 	../../../simulation_analysis/swf2vis_summary.R swf/log.swf -o sim_analysis/swf_summary
 
-#simu_stretch:
-	#../../../simulation_analysis/swf2vis_stretchCDF_KDE.R $(ALL_SIMULATION_RESULTS)  -o $(SIM_ANALYSIS_FOLDER)/stretch.pdf -r 2
+metrics_filter:
+	../../../simulation_analysis/metrics_filter.R sim_analysis/metrics_complete -o sim_analysis
 
-#simu_metrics:
-	#../../../simulation_analysis/swf2vis_metrics.R $(ALL_SIMULATION_RESULTS) -o $(SIM_ANALYSIS_FOLDER)/metrics
+metrics_learn:
+	../../../simulation_analysis/metrics_ranking_learn.R sim_analysis_first3wk   -o sim_analysis/metrics_complete/learned_best_rmsbsld
 
-#simu_allmetrics: simu_metrics_sort_avgbsld simu_metrics_sort_avgstretch simu_metrics_sort_RMSBSLD simu_metrics_sort_RMSS
-
-#simu_metrics_sort_%:simu_metrics
-	#../../data_manipulation/$@  $(SIM_ANALYSIS_FOLDER)/metrics >$(SIM_ANALYSIS_FOLDER)/$@
-
-#_____________CLEANING___________:
-clean:
-	rm -rf $(DRY_PREDICTION_FOLDER)/* $(ANALYSIS_FOLDER)/* $(SWF_FOLDER)/* $(MEASUREMENTS_FOLDER)/* $(COEFFS_FOLDER)/* $(SIM_FOLDER)/* $(PRED_CPROFILE_FOLDER)/* $(SIM_CPROFILE_FOLDER)/* $(SIM_ANALYSIS_FOLDER)/*
-
-#_____________ARCHIVED___________:
-#extraction of specific information for data analysis:
-#extract_req_time:
-#../../data_manipulation/extract_req_time original_swf/log.swf > $(DRY_PREDICTION_FOLDER)/prediction_req_time
-#extraction of specific information for data analysis:
-#extract_run_time:
-#../../data_manipulation/extract_run_time original_swf/log.swf > prediction_results/clairvoyant
-#simulation_analysis:
-#../../simulation_analysis/swf2vis_metrics.R simulated_swf/* -o /tmp/truc > analysis_results/metrics
-#prediction_analysis:mae mse rec_abs rec
-#mse:extract_run_time extract_req_time
-#../../prediction_analysis/MSE_vs_t_smoothed.R prediction_results/* -o analysis_results/MSE.pdf -r 2
-#mae:extract_run_time extract_req_time
-#../../prediction_analysis/MAE_vs_t_smoothed.R prediction_results/*  -o analysis_results/MAE.pdf -r 2
-#rec:extract_run_time extract_req_time
-#../../prediction_analysis/REC_-inf+inf.R prediction_results/* -o analysis_results/REC.pdf -r 2
-#rec_abs:extract_run_time extract_req_time
-#../../prediction_analysis/REC_abs.R prediction_results/*  -o analysis_results/REC_ABS.pdf -r 2
-#clean_safe:
-#rm -f predicted_swf_filtered/* predicted_swf/* prediction_results/predictions_req_time prediction_results/clairvoyant
-#cleanall:clean_safe
-#rm -f simulated_swf/* prediction_results/* analysis_results/* original_swf/log.swf original_swf/extracted_features
-#archived:
-#logfile swf generation
-#swfs:
-#../../data_manipulation/make_all_swfs prediction_results predicted_swf original_swf/curie_sample.swf
-#logfile feature extraction
-#extract:
-#../../prediction/extractor.py original_swf/log.swf > original_swf/extracted_features
-#work:filter extract predict swfs filter_predictions simulate
-#analysis:prediction_analysis simulation_analysis
