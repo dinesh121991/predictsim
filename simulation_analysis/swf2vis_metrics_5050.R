@@ -145,9 +145,13 @@ doit <- function(data, swf_filename, output_file)
 	write.table(df,output_file, sep="   ",row.names=FALSE)
 }
 
-
 i = 1
 swf_filename=args$swf_filenames[i]
+
+csvfile = substr(basename(swf_filename), 0, nchar(swf_filename)-4 )
+
+dire = args$output
+
 dataOrig= tryCatch({
     swf_read(swf_filename)
   }, error= function(e) {
@@ -157,7 +161,6 @@ dataOrig= tryCatch({
   })
   
   
-dire = args$output
 
 mintime = min(dataOrig$submit_time)
 maxtime = max(dataOrig$submit_time + dataOrig$wait_time + dataOrig$run_time)
@@ -166,11 +169,11 @@ midtime = (maxtime-mintime)/2.0 + mintime
 
 data = dataOrig[which(dataOrig$submit_time > midtime),]
 
-doit(data, swf_filename, paste(dire,"/sim_analysis_after50/metrics",sep=""))
+doit(data, swf_filename, paste(dire,"/sim_analysis_after50/",csvfile,sep=""))
 
 data = dataOrig[which(dataOrig$submit_time <= midtime),]
 
-doit(data, swf_filename, paste(dire,"/sim_analysis_before50/metrics",sep=""))
+doit(data, swf_filename, paste(dire,"/sim_analysis_before50/",csvfile,sep=""))
 
 
 
