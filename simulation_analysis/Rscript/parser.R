@@ -34,6 +34,13 @@ parser_common<-function(description,epilog){
 }
 
 #parser to load column files.
+
+parser_files<-function(description,epilog){
+	parser<-parser_common(description,epilog)
+	parser$add_argument('filenames',nargs='+',metavar='FILE',type='character', help='input file(s).')
+	return(parser)
+}
+
 parser_flat<-function(description,epilog){
 	parser<-parser_common(description,epilog)
 	parser$add_argument('filenames',nargs='+',metavar='FILE',type='character', help='input file(s).')
