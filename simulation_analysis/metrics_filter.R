@@ -92,7 +92,23 @@ setwd(execution_wd)
 df<-read.table(args$swf_filename)
 
 print(nrow(df))
+#df1=df[which(df$predictor=="predictor_sgdlinear"&
+             #df$pthreshold==0                   &
+             #(df$prightside=="square"  |
+              #df$prightside=="abs")             &
+             #(df$pleftside=="abs"      |
+              #df$pleftside=="square")           &
+             #((df$prightparam==1       &
+               #df$pleftparam==100)         |
+              #(df$prightparam==100     &
+               #df$pleftparam==1)           |
+              #(df$prightparam==1       &
+               #df$pleftparam==1))
+             #),]
+
 df1=df[which(df$predictor=="predictor_sgdlinear"&
+             (df$pweight=="1" |
+             df$pweight=="5+log(r/m)")           &
              df$pthreshold==0                   &
              (df$prightside=="square"  |
               df$prightside=="abs")             &
@@ -107,6 +123,7 @@ df1=df[which(df$predictor=="predictor_sgdlinear"&
              ),]
 
 df=rbind(df1,df[which(!df$predictor=="predictor_sgdlinear"),])
+print(nrow(df))
 
 
 #summary(df)

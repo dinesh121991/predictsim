@@ -162,7 +162,7 @@ selected=merge(data,best_curve,by=c("predictor","scheduler","corrector","pweight
 print(selected[,c("RMSBSLD.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")])
 write.table(selected[,c("RMSBSLD.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")],paste(args$output,"/validation",sep=""),sep="   ",row.names=TRUE)
 
-for (i in 1:40) {
+for (i in 1:6) {
   draw_curve(ndf[i,],xlim=86600)
   #draw_curve(ndf[i,])
 }
