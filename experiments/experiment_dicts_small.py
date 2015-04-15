@@ -28,31 +28,9 @@ sgdlinear_configs= [
         for lp in leftparam
         for tr in threshold
         for w in weight
-        if not(threshold == 0 and (rs == ls))
         if not(rp == 100 and lp == 100)
         ]
-sgdlinear_configs += [{
-            "name":"predictor_sgdlinear",
-            "max_cores":"auto",
-            "eta":5000,
-            "loss":"composite",
-            "rightside":ss,
-            "rightparam":1,
-            "leftside":ss,
-            "leftparam":1,
-            "threshold":0,
-            "weight":w,
-            "quadratic":True,
-            "cubic": False,
-            "gd": "NAG",
-            "regularization":"l2",
-            "lambda":4000000000
-            }
-        for ss in rightside
-        for w in weight
-        ]
-	
-	
+
 
 predictors_with_correctors= sgdlinear_configs+[{"name":"predictor_tsafrir"}]
 predictors_without_correctors = [{"name":"predictor_clairvoyant"}, {"name":"predictor_reqtime"}, {"name":"predictor_double_reqtime"}]
