@@ -148,7 +148,7 @@ doit <- function(data, swf_filename, output_file)
 i = 1
 swf_filename=args$swf_filenames[i]
 
-csvfile = substr(basename(swf_filename), 0, nchar(swf_filename)-4 )+".csv"
+csvfile = substr(basename(swf_filename), 0, nchar(swf_filename)-4 )
 
 dire = args$output
 
@@ -169,11 +169,11 @@ midtime = (maxtime-mintime)/2.0 + mintime
 
 data = dataOrig[which(dataOrig$submit_time > midtime),]
 
-doit(data, swf_filename, paste(dire,"/sim_analysis_after50/individual/",csvfile,sep=""))
+doit(data, swf_filename, paste(dire,"/sim_analysis_after50/individual/",csvfile,".csv",sep=""))
 
 data = dataOrig[which(dataOrig$submit_time <= midtime),]
 
-doit(data, swf_filename, paste(dire,"/sim_analysis_before50/individual/",csvfile,sep=""))
+doit(data, swf_filename, paste(dire,"/sim_analysis_before50/individual/",csvfile,".csv",sep=""))
 
 
 
