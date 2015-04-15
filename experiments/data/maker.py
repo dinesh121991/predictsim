@@ -119,9 +119,13 @@ if not os.path.exists("sim_analysis_after50"):
 if not os.path.exists("sim_analysis_after50/individual"):
 	os.makedirs("sim_analysis_after50/individual")
 #TODO:support N to 2N
-#this taks also generate sim_analysis_before50/individual/*.csv
+#this taks also generate sim_analysis_after50/individual/*.csv
 b.doTask(
 	source=["simulations/", ".swf.gz"], dest=["sim_analysis_before50/individual/", ".csv"],
+	command="""../../../simulation_analysis/swf2vis_metrics_5050.R $SOURCE_FILE -o ./""")
+#this task should do nothing
+b.doTask(
+	source=["simulations/", ".swf.gz"], dest=["sim_analysis_after50/individual/", ".csv"],
 	command="""../../../simulation_analysis/swf2vis_metrics_5050.R $SOURCE_FILE -o ./""")
 
 b.doTask(
