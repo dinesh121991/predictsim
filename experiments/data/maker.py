@@ -110,34 +110,33 @@ b.doTask(
 	source="sim_analysis/metrics", dest="sim_analysis/metrics_complete",
 	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis/metrics' > $DEST_FILE")
 
-if not os.path.exists("sim_analysis_after3w"):
-	os.makedirs("sim_analysis_after3w")
-if not os.path.exists("sim_analysis_after3w/individual"):
-	os.makedirs("sim_analysis_after3w/individual")
+if not os.path.exists("sim_analysis_before50"):
+	os.makedirs("sim_analysis_before50")
+if not os.path.exists("sim_analysis_before50/individual"):
+	os.makedirs("sim_analysis_before50/individual")
+if not os.path.exists("sim_analysis_after50"):
+	os.makedirs("sim_analysis_after50")
+if not os.path.exists("sim_analysis_after50/individual"):
+	os.makedirs("sim_analysis_after50/individual")
+#TODO:support N to 2N
+#this taks also generate sim_analysis_before50/individual/*.csv
 b.doTask(
-	source=["simulations/", ".swf.gz"], dest=["sim_analysis_after3w/individual/", ".csv"],
-	command="""../../../simulation_analysis/swf2vis_metrics_after3w.R $SOURCE_FILE -o $DEST_FILE""")
+	source=["simulations/", ".swf.gz"], dest=["sim_analysis_after50/individual/", ".csv"],
+	command="""../../../simulation_analysis/swf2vis_metrics_5050.R $SOURCE_FILE -o ./""")
+
 b.doTask(
-	source=["sim_analysis_after3w/individual/", ".csv"], dest="sim_analysis_after3w/metrics",
+	source=["sim_analysis_after50/individual/", ".csv"], dest="sim_analysis_after50/metrics",
 	command="../../data_manipulation/merge_to_metrics.sh $SOURCE > $DEST_FILE")
 b.doTask(
-	source="sim_analysis_after3w/metrics", dest="sim_analysis_after3w/metrics_complete",
-	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_after3w/metrics' > $DEST_FILE")
+	source="sim_analysis_after50/metrics", dest="sim_analysis_after50/metrics_complete",
+	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_after50/metrics' > $DEST_FILE")
 
-if not os.path.exists("sim_analysis_first3w"):
-	os.makedirs("sim_analysis_first3w")
-if not os.path.exists("sim_analysis_first3w/individual"):
-	os.makedirs("sim_analysis_first3w/individual")
 b.doTask(
-	source=["simulations/", ".swf.gz"], dest=["sim_analysis_first3w/individual/", ".csv"],
-	command="""../../../simulation_analysis/swf2vis_metrics_first3w.R $SOURCE_FILE -o $DEST_FILE""")
-b.doTask(
-	source=["sim_analysis_first3w/individual/", ".csv"], dest="sim_analysis_first3w/metrics",
+	source=["sim_analysis_before50/individual/", ".csv"], dest="sim_analysis_before50/metrics",
 	command="../../data_manipulation/merge_to_metrics.sh $SOURCE > $DEST_FILE")
 b.doTask(
-	source="sim_analysis_first3w/metrics", dest="sim_analysis_first3w/metrics_complete",
-	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_first3w/metrics' > $DEST_FILE")
-
+	source="sim_analysis_before50/metrics", dest="sim_analysis_before50/metrics_complete",
+	command="python ../../data_manipulation/fill_metrics.py run.db 'sim_analysis_before50/metrics' > $DEST_FILE")
 
 
 
