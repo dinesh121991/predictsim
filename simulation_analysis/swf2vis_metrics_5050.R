@@ -148,7 +148,7 @@ doit <- function(data, swf_filename, output_file)
 i = 1
 swf_filename=args$swf_filenames[i]
 
-csvfile = substr(basename(swf_filename), 0, nchar(swf_filename)-4 )
+csvfile = substr(basename(swf_filename), 0, nchar(basename(swf_filename))-7 )
 
 dire = args$output
 
