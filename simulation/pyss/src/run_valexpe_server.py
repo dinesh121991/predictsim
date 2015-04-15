@@ -17,7 +17,8 @@ ouput_dir = expe_dir+"/simulations/"
 input_file = expe_dir+"/swf/log.swf"
 
 #dict_path = '../../../experiments/experiment_dicts.py'
-dict_path = '../../../experiments/experiment_dicts_kth.py'
+#dict_path = '../../../experiments/experiment_dicts_kth.py'
+dict_path = '../../../experiments/experiment_dicts_small.py'
 
 
 def nice(s):
