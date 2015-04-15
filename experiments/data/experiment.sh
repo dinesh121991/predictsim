@@ -5,6 +5,7 @@ do
   cd $f
   make clean
   make filter
-  make simulate -j 2
-  make simu_allmetrics
+  make predict -j 2
+  make prediction_analysis
+  cd ..
 done
