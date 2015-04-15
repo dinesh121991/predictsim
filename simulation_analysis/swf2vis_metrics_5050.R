@@ -166,11 +166,11 @@ midtime = (maxtime-mintime)/2.0 + mintime
 
 data = dataOrig[which(dataOrig$submit_time > midtime),]
 
-doit(data, swf_filename, dire+"/sim_analysis_after50/metrics")
+doit(data, swf_filename, paste(dire,"/sim_analysis_after50/metrics",sep=""))
 
 data = dataOrig[which(dataOrig$submit_time <= midtime),]
 
-doit(data, swf_filename, dire+"/sim_analysis_before50/metrics")
+doit(data, swf_filename, paste(dire,"/sim_analysis_before50/metrics",sep=""))
 
 
 
