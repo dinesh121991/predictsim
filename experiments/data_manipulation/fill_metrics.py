@@ -47,12 +47,15 @@ for i in range(len(df['name'])):
 			if "Exception" in line:
 				break
 			if "Elapsed Time" in line:
-				a = re.findall('([0-9]+):([0-9]+):([0-9]+.[0-9]+)', line)
-				#print a
-				sec = float(a[0][2])
-				minu = float(a[0][1])
-				hour = float(a[0][0])
-				df["simultime"][i] = sec + minu*60 + hour*3600
+				try:
+					a = re.findall('([0-9]+):([0-9]+):([0-9]+.[0-9]+)', line)
+					#print a
+					sec = float(a[0][2])
+					minu = float(a[0][1])
+					hour = float(a[0][0])
+					df["simultime"][i] = sec + minu*60 + hour*3600
+				except:
+					df["simultime"][i] = None
 				break
 		
 	if expes != None:
