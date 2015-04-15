@@ -87,66 +87,104 @@ setwd(execution_wd)
 
 #type stuff here.
 
-name       =c()
-len        =c()
-avgft      =c()
-maxft      =c()
-RMSFT      =c()
-avgstretch =c()
-maxstretch =c()
-RMSS       =c()
-avgbsld    =c()
-maxbsld    =c()
-RMSBSLD    =c()
+if(length(args$swf_filenames) != 1) {
+	print("only 1 file a t time is supported")
+	exit(1)
+}
 
-for (i in 1:length(args$swf_filenames)) {
-  swf_filename=args$swf_filenames[i]
-  data= tryCatch({
+if(args$output == "") {
+	print("outptut directory should be precise")
+	quit("no")
+}
+
+
+doit <- function(data, swf_filename, output_file)
+{
+	name       =c()
+	len        =c()
+	avgft      =c()
+	maxft      =c()
+	RMSFT      =c()
+	avgstretch =c()
+	maxstretch =c()
+	RMSS       =c()
+	avgbsld    =c()
+	maxbsld    =c()
+	RMSBSLD    =c()
+
+	data$ft=data$wait_time+data$run_time
+	data$stretch=data$ft/data$run_time
+	data$bsld=pmax(1,data$ft/pmax(rep(10, nrow(data)),data$run_time))
+	n=nrow(data)
+
+	name=append(name,swf_filename)
+	len=append(len,nrow(data))
+	avgft=append(avgft, sum(as.numeric(data$ft))/nrow(data))
+	maxft=append(maxft, max(data$ft))
+	RMSFT=append(RMSFT, sqrt(sum(as.numeric(data$ft)*as.numeric(data$ft))/n))
+	avgstretch=append(avgstretch, sum(data$stretch)/nrow(data))
+	maxstretch=append(maxstretch, max(data$stretch))
+	RMSS=append(RMSS, sqrt(sum(as.numeric(data$stretch)*as.numeric(data$stretch))/n))
+	avgbsld=append(avgbsld, sum(data$bsld)/nrow(data))
+	maxbsld=append(maxbsld, max(data$bsld))
+	RMSBSLD=append(RMSBSLD, sqrt(sum(as.numeric(data$bsld)*as.numeric(data$bsld))/n))
+
+
+	df=data.frame(name=name,
+		length=len,
+		avgft=avgft,
+		maxft=maxft,
+		RMSFT=RMSFT,
+		avgstretch=avgstretch,
+		maxstretch=maxstretch,
+		RMSS=RMSS,
+		avgbsld=avgbsld,
+		maxbsld=maxbsld,
+		RMSBSLD=RMSBSLD)
+	df=df[with(df,order(avgstretch,RMSBSLD)),]
+	write.table(df,output_file, sep="   ",row.names=FALSE)
+}
+
+i = 1
+swf_filename=args$swf_filenames[i]
+
+csvfile = substr(basename(swf_filename), 0, nchar(swf_filename)-4 )
+
+dire = args$output
+
+dataOrig= tryCatch({
     swf_read(swf_filename)
   }, error= function(e) {
     data.frame(job_id=c(NA), submit_time=c(NA), wait_time=c(NA), run_time=c(NA), proc_alloc=c(NA), cpu_time_used=c(NA), mem_used=c(NA), proc_req=c(NA), time_req=c(NA), mem_req=c(NA), status=c(NA), user_id=c(NA), group_id=c(NA), exec_id=c(NA), queue_id=c(NA), partition_id=c(NA), previous_job_id=c(NA), think_time=c(NA))
+    print(paste(swf_filename, "NOT FOUND"))
+    quit("no")
   })
-  if(!sum(is.na(data$submit_time)))
-      data = data[which(data$submit_time > 3*7*24*3600),]
+  
+  
 
-#   data=data[as.integer(floor(nrow(data)*0.01)):nrow(data),]
-  data$ft=data$wait_time+data$run_time
-  data$stretch=data$ft/data$run_time
-  data$bsld=pmax(1,data$ft/pmax(rep(10, nrow(data)),data$run_time))
-  n=nrow(data)
-
-  name=append(name,swf_filename)
-  len=append(len,nrow(data))
-  avgft=append(avgft, sum(as.numeric(data$ft))/nrow(data))
-  maxft=append(maxft, max(data$ft))
-  RMSFT=append(RMSFT, sqrt(sum(as.numeric(data$ft)*as.numeric(data$ft))/n))
-  avgstretch=append(avgstretch, sum(data$stretch)/nrow(data))
-  maxstretch=append(maxstretch, max(data$stretch))
-  RMSS=append(RMSS, sqrt(sum(as.numeric(data$stretch)*as.numeric(data$stretch))/n))
-  avgbsld=append(avgbsld, sum(data$bsld)/nrow(data))
-  maxbsld=append(maxbsld, max(data$bsld))
-  RMSBSLD=append(RMSBSLD, sqrt(sum(as.numeric(data$bsld)*as.numeric(data$bsld))/n))
-
-}
-
-df=data.frame(name=name,
-              length=len,
-              avgft=avgft,
-              maxft=maxft,
-              RMSFT=RMSFT,
-              avgstretch=avgstretch,
-              maxstretch=maxstretch,
-              RMSS=RMSS,
-              avgbsld=avgbsld,
-              maxbsld=maxbsld,
-              RMSBSLD=RMSBSLD)
-df=df[with(df,order(avgstretch,RMSBSLD)),]
-write.table(df,args$output,sep="   ",row.names=FALSE)
+mintime = min(dataOrig$submit_time)
+maxtime = max(dataOrig$submit_time + dataOrig$wait_time + dataOrig$run_time)
+midtime = (maxtime-mintime)/2.0 + mintime
 
 
-#L1=c("Filename   Average_Flow_time    Max_Flow_time    RMSFT    Average_Stretch    Max_Stretch    RMSS    Average_Bsld    Max_Bsld    RMBSLD")
-#lapply(L1, write, args$output, append=TRUE, ncolumns=1)
-#lapply(L, write, args$output, append=TRUE, ncolumns=1)
+data = dataOrig[which(dataOrig$submit_time > midtime),]
+
+doit(data, swf_filename, paste(dire,"/sim_analysis_after50/individual/",csvfile,sep=""))
+
+data = dataOrig[which(dataOrig$submit_time <= midtime),]
+
+doit(data, swf_filename, paste(dire,"/sim_analysis_before50/individual/",csvfile,sep=""))
+
+
+
+
+
+
+
+
+
+
+
 
 ###################END BLOCK#####################
 
