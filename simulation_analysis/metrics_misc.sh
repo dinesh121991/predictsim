@@ -19,4 +19,4 @@ echo "#Global and Algo-wise maximal and minimal ranks of the predictive schedule
 cat sim_analysis/learning_ranks_sjbf|column -s' ' -t  >> sim_analysis/misc
 cat sim_analysis/learning_ranks_fcfs|column -s' ' -t  >> sim_analysis/misc
 
-cat sim_analysis/misc | less -#2 -N -S
+#cat sim_analysis/misc | less -#2 -N -S

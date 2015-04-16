@@ -92,7 +92,22 @@ setwd(execution_wd)
 df<-read.table(args$swf_filename)
 
 print(nrow(df))
+#df1=df[which(df$predictor=="predictor_sgdlinear"&
+             #df$pthreshold==0                   &
+             #(df$prightside=="square"  |
+              #df$prightside=="abs")             &
+             #(df$pleftside=="abs"      |
+              #df$pleftside=="square")           &
+             #((df$prightparam==1       &
+               #df$pleftparam==100)         |
+              #(df$prightparam==100     &
+               #df$pleftparam==1)           |
+              #(df$prightparam==1       &
+               #df$pleftparam==1))
+             #),]
+
 df1=df[which(df$predictor=="predictor_sgdlinear"&
+             df$scheduler=="easy_plus_plus_scheduler"&
              df$pthreshold==0                   &
              (df$prightside=="square"  |
               df$prightside=="abs")             &
@@ -106,7 +121,10 @@ df1=df[which(df$predictor=="predictor_sgdlinear"&
                df$pleftparam==1))
              ),]
 
-df=rbind(df1,df[which(!df$predictor=="predictor_sgdlinear"),])
+df=rbind(df1,df[which((!df$predictor=="predictor_sgdlinear") &
+                      df$scheduler=="easy_plus_plus_scheduler")
+                      ,])
+print(nrow(df))
 
 
 #summary(df)

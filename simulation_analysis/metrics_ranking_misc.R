@@ -110,6 +110,8 @@ T1=ranked[which(
                 (ranked$scheduler=="easy_prediction_backfill_scheduler" &
                  ranked$predictor=="predictor_reqtime")|
                 (ranked$scheduler=="easy_plus_plus_scheduler" &
+                 ranked$predictor=="predictor_reqtime")|
+                (ranked$scheduler=="easy_plus_plus_scheduler" &
                  ranked$predictor=="predictor_tsafrir" &
                  ranked$corrector=="tsafrir") |
                 (ranked$predictor=="predictor_clairvoyant")
