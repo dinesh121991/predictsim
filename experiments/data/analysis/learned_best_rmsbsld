@@ -1,0 +1,15 @@
+CTC-SP2
+"avgbsld" "scheduler" "corrector" "predictor" "prightside" "pleftside" "pthreshold" "pweight"
+18.509644698864 "easy_plus_plus_scheduler" "recursive_doubling" "predictor_sgdlinear" "square" "square" 600 "1"
+KTH-SP2
+"avgbsld" "scheduler" "corrector" "predictor" "prightside" "pleftside" "pthreshold" "pweight"
+31.5006043149518 "easy_plus_plus_scheduler" "tsafrir" "predictor_sgdlinear" "square" "abs" 60 "1"
+SDSC-SP2
+"avgbsld" "scheduler" "corrector" "predictor" "prightside" "pleftside" "pthreshold" "pweight"
+168.710270780165 "easy_plus_plus_scheduler" "reqtime" "predictor_sgdlinear" "abs" "abs" 0 "1"
+SDSC-BLUE
+"avgbsld" "scheduler" "corrector" "predictor" "prightside" "pleftside" "pthreshold" "pweight"
+57.1355840151807 "easy_plus_plus_scheduler" "reqtime" "predictor_sgdlinear" "square" "abs" 0 "5+log(r/m)"
+CEA-curie
+"avgbsld" "scheduler" "corrector" "predictor" "prightside" "pleftside" "pthreshold" "pweight"
+26.2372093419771 "easy_plus_plus_scheduler" "reqtime" "predictor_sgdlinear" "square" "square" 600 "1"
