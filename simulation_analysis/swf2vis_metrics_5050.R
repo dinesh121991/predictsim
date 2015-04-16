@@ -159,6 +159,12 @@ dataOrig= tryCatch({
     print(paste(swf_filename, "NOT FOUND"))
     quit("no")
   })
+
+  nbefore = nrow(dataOrig)
+  dataOrig = dataOrig[which(!is.na(dataOrig$wait_time)),]
+  dataOrig = dataOrig[which(!is.na(dataOrig$run_time)),]
+  if( nbefore != nrow(dataOrig))
+	print(paste("There were", nbefore-nrow(dataOrig), "jobs with NA"))
   
   
 

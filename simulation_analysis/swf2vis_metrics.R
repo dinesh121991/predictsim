@@ -107,6 +107,12 @@ for (i in 1:length(args$swf_filenames)) {
     data.frame(job_id=c(NA), submit_time=c(NA), wait_time=c(NA), run_time=c(NA), proc_alloc=c(NA), cpu_time_used=c(NA), mem_used=c(NA), proc_req=c(NA), time_req=c(NA), mem_req=c(NA), status=c(NA), user_id=c(NA), group_id=c(NA), exec_id=c(NA), queue_id=c(NA), partition_id=c(NA), previous_job_id=c(NA), think_time=c(NA))
   })
 
+  nbefore = nrow(data)
+  data = data[which(!is.na(data$wait_time)),]
+  data = data[which(!is.na(data$run_time)),]
+  if( nbefore != nrow(data))
+	print(paste("There were", nbefore-nrow(data), "jobs with NA"))
+
 #   data=data[as.integer(floor(nrow(data)*0.01)):nrow(data),]
   data$ft=data$wait_time+data$run_time
   data$stretch=data$ft/data$run_time
@@ -115,7 +121,7 @@ for (i in 1:length(args$swf_filenames)) {
 
   name=append(name,swf_filename)
   len=append(len,nrow(data))
-  avgft=append(avgft, sum(as.numeric(data$ft))/nrow(data))
+  avgft=append(avgft, sum(data$ft)/nrow(data))
   maxft=append(maxft, max(data$ft))
   RMSFT=append(RMSFT, sqrt(sum(as.numeric(data$ft)*as.numeric(data$ft))/n))
   avgstretch=append(avgstretch, sum(data$stretch)/nrow(data))
