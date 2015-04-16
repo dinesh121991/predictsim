@@ -91,14 +91,20 @@ setwd(execution_wd)
 #type stuff here.
 print("E")
 
-dftrain<-read.table(args$filenames[1])
-dftest<-read.table(args$filenames[2])
+dftrain<-read.table(args$filenames[1],stringsAsFactors=FALSE)
+dftest<-read.table(args$filenames[2],stringsAsFactors=FALSE)
 
 ranked=dftrain[which(!dftrain$predictor=="predictor_clairvoyant"),]
 ranked=ranked[with(ranked, order(avgbsld)), ]
 best=ranked[1,]
 
+print("Best Name:")
+print(best$name)
+#print("available:")
+#print(dftest$name)
+
 perf=dftest[which(dftest$name==best$name),(colnames(dftest) %in% c("scheduler","predictor","corrector","pweight","pleftside","prightside","avgbsld","pthreshold"))]
+
 
 write.table(perf,args$output,row.names=FALSE)
 

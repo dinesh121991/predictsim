@@ -1,10 +1,11 @@
 #___________SIMULATION_ANALYSIS__:
 #simulation_analysis: simu_stretch simu_metrics
-FILES=CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered  CTC-SP2/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered
-FILES2=CEA-curie/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered
-FILES3=CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered
-FILES4=CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete
-FILES5=KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete CEA-curie/sim_analysis/metrics_filtered 
+FILES=Metacentrum2013/sim_analysis/metrics_filtered CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered  CTC-SP2/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered
+FILES2=Metacentrum2013/sim_analysis/metrics_filtered CEA-curie/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered
+FILES3=Metacentrum2013/sim_analysis/metrics_filtered CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered
+FILES4=Metacentrum2013/sim_analysis/metrics_filtered CEA-curie/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete
+FILES5=Metacentrum2013/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete CEA-curie/sim_analysis/metrics_filtered
+FILES6=KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete CEA-curie/sim_analysis/metrics_filtered Metacentrum2013/sim_analysis/metrics_filtered
 
 compare_traces: filter
 	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R  -o analysis/scatter_rankings_scheduler_predictor_KTH-SP2_CTC-SP2.pdf -r 1
@@ -32,6 +33,7 @@ cross_validate: filter
 	../../simulation_analysis/metrics_selection_cross_validation.R $(FILES3) -o cross_validation_ctcsp2
 	../../simulation_analysis/metrics_selection_cross_validation.R $(FILES4) -o cross_validation_sdscsp2
 	../../simulation_analysis/metrics_selection_cross_validation.R $(FILES5) -o cross_validation_ceacurie
+	../../simulation_analysis/metrics_selection_cross_validation.R $(FILES6) -o cross_validation_meta
 	echo  "cross validating for SDSC BLUE"
 	cat cross_validation_sdscblue/ranked_list|column -s' ' -t > cross_validation_sdscblue/rlist
 	cat cross_validation_sdscblue/validation|column -s' ' -t > cross_validation_sdscblue/sel
@@ -57,6 +59,11 @@ cross_validate: filter
 	cat cross_validation_ceacurie/validation|column -s' ' -t > cross_validation_ceacurie/sel
 	rm cross_validation_ceacurie/ranked_list
 	rm cross_validation_ceacurie/validation
+	echo  "cross validating for METACENTRUM"
+	cat cross_validation_meta/ranked_list|column -s' ' -t > cross_validation_meta/rlist
+	cat cross_validation_meta/validation|column -s' ' -t > cross_validation_meta/sel
+	rm cross_validation_meta/ranked_list
+	rm cross_validation_meta/validation
 	./cross_validate_join.sh
 
 learn: filter

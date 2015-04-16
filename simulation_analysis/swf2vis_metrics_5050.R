@@ -114,7 +114,7 @@ doit <- function(data, swf_filename, output_file)
 
 	data$ft=data$wait_time+data$run_time
 	data$stretch=data$ft/data$run_time
-	data$bsld=pmax(1,data$ft/pmax(rep(10, nrow(data)),data$run_time))
+	data$bsld=pmax(1,data$ft/pmax(10,data$run_time))
 	n=nrow(data)
 
 	name=append(name,swf_filename)
@@ -165,8 +165,6 @@ dataOrig= tryCatch({
   dataOrig = dataOrig[which(!is.na(dataOrig$run_time)),]
   if( nbefore != nrow(dataOrig))
 	print(paste("There were", nbefore-nrow(dataOrig), "jobs with NA"))
-  
-  
 
 mintime = min(dataOrig$submit_time)
 maxtime = max(dataOrig$submit_time + dataOrig$wait_time + dataOrig$run_time)

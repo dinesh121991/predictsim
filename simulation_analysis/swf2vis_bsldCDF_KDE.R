@@ -100,10 +100,16 @@ for (i in 1:length(args$swf_filenames)){
   data=swf_read(swf_filename)
   #value=(data$wait_time+data$run_time)/data$run_time
 
+  nbefore = nrow(data)
+  data = data[which(!is.na(data$wait_time)),]
+  data = data[which(!is.na(data$run_time)),]
+  if( nbefore != nrow(data))
+	print(paste("There were", nbefore-nrow(data), "jobs with NA"))
+
   data$ft=data$wait_time+data$run_time
   value=pmax(1,data$ft/pmax(rep(10, nrow(data)),data$run_time))
 
-  means[i]=mean(value)
+  means[i]=sum(value)/length(value)
   maxes[i]=max(value)
   median[i]=median(value)
   squares[i]=sum(value*value)/length(value)

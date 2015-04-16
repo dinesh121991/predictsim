@@ -93,34 +93,33 @@ df<-read.table(args$swf_filename)
 
 print(nrow(df))
 df1=df[which(df$predictor=="predictor_sgdlinear"&
-             df$pthreshold==0                   &
              (df$prightside=="square"  |
               df$prightside=="abs")             &
              (df$pleftside=="abs"      |
               df$pleftside=="square")           &
              ((df$prightparam==1       &
-               df$pleftparam==100)         |
-              (df$prightparam==100     &
+               df$pleftparam==1)         |
+              (df$prightparam==1     &
                df$pleftparam==1)           |
               (df$prightparam==1       &
                df$pleftparam==1))
              ),]
 
-df1=df[which(df$predictor=="predictor_sgdlinear"&
-             (df$pthreshold==0         |
-              df$pthreshold==60        |
-              df$pthreshold==600)               &
-             (df$prightside=="square"  |
-              df$prightside=="abs")             &
-             (df$pleftside=="abs"      |
-              df$pleftside=="square")           &
-             ((df$prightparam==1       &
-               df$pleftparam==100)         |
-              (df$prightparam==100     &
-               df$pleftparam==1)           |
-              (df$prightparam==1       &
-               df$pleftparam==1))
-             ),]
+#df1=df[which(df$predictor=="predictor_sgdlinear"&
+             #(df$pthreshold==0         |
+              #df$pthreshold==60        |
+              #df$pthreshold==600)               &
+             #(df$prightside=="square"  |
+              #df$prightside=="abs")             &
+             #(df$pleftside=="abs"      |
+              #df$pleftside=="square")           &
+             #((df$prightparam==1       &
+               #df$pleftparam==100)         |
+              #(df$prightparam==100     &
+               #df$pleftparam==1)           |
+              #(df$prightparam==1       &
+               #df$pleftparam==1))
+             #),]
 
 df=rbind(df1,df[which(!df$predictor=="predictor_sgdlinear")
                       ,])

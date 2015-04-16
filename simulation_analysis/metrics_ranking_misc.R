@@ -114,7 +114,25 @@ T1=ranked[which(
                 (ranked$scheduler=="easy_plus_plus_scheduler" &
                  ranked$predictor=="predictor_tsafrir" &
                  ranked$corrector=="tsafrir") |
-                (ranked$predictor=="predictor_clairvoyant")
+                (ranked$predictor=="predictor_clairvoyant")   |
+                (ranked$scheduler=="easy_plus_plus_scheduler" &
+                 ranked$predictor=="predictor_sgdlinear" &
+                 ranked$pweight=="1" &
+                 ranked$pthreshold==0 &
+                 ranked$prightside=="abs" &
+                 ranked$pleftside=="abs" &
+                 ranked$prightparam==1 &
+                 ranked$pleftparam==1 &
+                 ranked$corrector=="tsafrir")
+                #(ranked$scheduler=="easy_plus_plus_scheduler" &
+                 #ranked$predictor=="predictor_sgdlinear" &
+                 #ranked$pweight=="1" &
+                 #ranked$pthreshold==0 &
+                 #ranked$prightside=="abs" &
+                 #ranked$pleftside=="abs" &
+                 #ranked$prightparam==1 &
+                 #ranked$pleftparam==1 &
+                 #ranked$corrector=="tsafrir")
                 ),
 (colnames(ranked) %in% c("rank","scheduler","corrector","predictor","RMSS","RMSBSLD","avgbsld"))]
 T1$PRETTY=pretty(T1$avgbsld,T1$rank)
