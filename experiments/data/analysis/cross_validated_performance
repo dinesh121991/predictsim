@@ -1,0 +1,15 @@
+cross_validation_ctcsp2/sel
+"rank"  "scheduler.x"               "predictor.x"        "corrector.x"  "RMSBSLD"         "pweight.x"  "pleftparam.x"  "prightparam.x"  "pleftside.x"  "prightside.x"  "pthreshold.x"  "avgbsld.x"       "PRETTY"
+163     "easy_plus_plus_scheduler"  "predictor_tsafrir"  "reqtime"      223.534879735278  NA           NA              NA               NA             NA              NA              26.5337857227919  "26.5/163"
+cross_validation_kthsp2/sel
+"rank"  "scheduler.x"               "predictor.x"          "corrector.x"  "RMSBSLD"         "pweight.x"   "pleftparam.x"  "prightparam.x"  "pleftside.x"  "prightside.x"  "pthreshold.x"  "avgbsld.x"       "PRETTY"
+229     "easy_plus_plus_scheduler"  "predictor_sgdlinear"  "tsafrir"      944.344522036654  "1+log(m*r)"  1               100              "abs"          "abs"           60              61.0608761008814  "61.1/229"
+cross_validation_sdscblue/sel
+"rank"  "scheduler.x"               "predictor.x"          "corrector.x"  "RMSBSLD"         "pweight.x"  "pleftparam.x"  "prightparam.x"  "pleftside.x"  "prightside.x"  "pthreshold.x"  "avgbsld.x"       "PRETTY"
+1048    "easy_plus_plus_scheduler"  "predictor_sgdlinear"  "reqtime"      1361.50631177902  "1"          1               1                "abs"          "square"        0               39.9482270878967  "39.9/1048"
+cross_validation_ceacurie/sel
+"rank"  "scheduler.x"               "predictor.x"          "corrector.x"  "RMSBSLD"         "pweight.x"   "pleftparam.x"  "prightparam.x"  "pleftside.x"  "prightside.x"  "pthreshold.x"  "avgbsld.x"       "PRETTY"
+34      "easy_plus_plus_scheduler"  "predictor_sgdlinear"  "tsafrir"      1376.09579708031  "1+log(m*r)"  1               1                "abs"          "square"        0               27.8603393917821  "27.9/34"
+cross_validation_sdscsp2/sel
+"rank"  "scheduler.x"               "predictor.x"          "corrector.x"  "RMSBSLD"         "pweight.x"   "pleftparam.x"  "prightparam.x"  "pleftside.x"  "prightside.x"  "pthreshold.x"  "avgbsld.x"     "PRETTY"
+5480    "easy_plus_plus_scheduler"  "predictor_sgdlinear"  "tsafrir"      814.320854912743  "1+log(m*r)"  1               100              "square"       "square"        600             112.0086535253  "112.0/5480"
