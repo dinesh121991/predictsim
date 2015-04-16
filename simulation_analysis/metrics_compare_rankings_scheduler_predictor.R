@@ -144,7 +144,12 @@ scale_shape_discrete(name="Predictor",
          #label=paste("Spearman's CC:",format(csp, digits=4)))+
 #annotate("text",x=8*xlim/10,y=8*ylim/10,
          #label=paste("Pearson's CC:",format(cp, digits=4)))+
-print(p)
+
+#set_output(device='pdf',filename=args$output,ratio=1,execution_wd,hei=7)
+
+ggsave("scatterplot.pdf",p,width=5,height=4)
+
+
 ###################END BLOCK#####################
 
 #############X11 OUTPUT MANAGEMENT###############

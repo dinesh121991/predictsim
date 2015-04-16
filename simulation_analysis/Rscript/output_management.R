@@ -1,18 +1,18 @@
-set_output<-function(device='pdf',filename='',ratio=1,execution_wd){
+set_output<-function(device='pdf',filename='',ratio=1,execution_wd,hei=7){
 	if (device=='pdf'|filename!=''){
 		old_wd=getwd()
 		setwd(execution_wd)	
 		if ( filename=='' ) {
 			filename<-'tmp.pdf' 
 		}
-		pdf(file=filename,width=7*ratio,height=7)
+		pdf(file=filename,width=hei*ratio,height=hei)
 		setwd(old_wd)
 		return(c("nostop",FALSE))
 	}else if (device=="x11"){
-		x11(width=7*ratio,height=7)
+		x11(width=hei*ratio,height=hei)
 		return(c("stop","tcl"))
 	} else if (device=="x11-notcl"){
-		x11(width=7*ratio,height=7)
+		x11(width=hei*ratio,height=hei)
 		return(c("stop","wait"))
 	}
 }
