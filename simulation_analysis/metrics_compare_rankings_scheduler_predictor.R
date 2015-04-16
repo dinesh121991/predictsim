@@ -97,32 +97,37 @@ df1<-read.table(args$filenames[1])
 df2<-read.table(args$filenames[2])
 #summary(df)
 
-df1 = df1[,(colnames(df1) %in% c("name","RMSBSLD","predictor","scheduler"))]
-df2 = df2[,(colnames(df2) %in% c("name","RMSBSLD"))]
+df1 = df1[,(colnames(df1) %in% c("name","avgbsld","predictor","scheduler"))]
+df2 = df2[,(colnames(df2) %in% c("name","avgbsld"))]
 result=merge(df1, df2, by="name")
-result=result[which(!is.na(result$RMSBSLD.x) & !is.na(result$RMSBSLD.y) & !result$predictor=="easy_backfill" & !result$predictor=="easy_backfill"),]
+result=result[which(!is.na(result$avgbsld.x) & !is.na(result$avgbsld.y) & !result$predictor=="easy_backfill" & !result$predictor=="easy_backfill"),]
 summary(result)
 
-csp = cor(result$RMSBSLD.x , result$RMSBSLD.y  , method = "spearman")
+csp = cor(result$avgbsld.x , result$avgbsld.y  , method = "spearman")
+cp = cor(result$avgbsld.x , result$avgbsld.y  , method = "pearson")
 
-xlim=max(result$RMSBSLD.x)
-ylim=max(result$RMSBSLD.y)
-p=ggplot(result, aes(x=RMSBSLD.x,y=RMSBSLD.y))+
+xlim=max(result$avgbsld.x)
+ylim=max(result$avgbsld.y)
+p=ggplot(result, aes(x=avgbsld.x,y=avgbsld.y))+
 geom_point(aes(colour=factor(scheduler),shape=factor(predictor)))+
-xlab(paste("RMSBSLD for ",args$filenames[1]))+
-annotate("text",x=9*xlim/10,y=9*ylim/10,
-         label=paste("Spearman's CC:",format(csp, digits=4)))+
-ylab(paste("RMSBSLD for ",args$filenames[2]))+
-ggtitle("oeu")+
+xlab(paste("AVGBSLD for KTH-SP2"))+
+ylab(paste("AVGBSLD for CTC-SP2"))+
+theme(legend.justification=c(1,0), legend.position=c(0.8,0.4))+
+scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"), 
+                       name="Experimental\nCondition",
+                       breaks=c("ctrl", "trt1", "trt2"),
+                       labels=c("Control", "Treatment 1", "Treatment 2"))+
+ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
 scale_colour_grey()
 
+#annotate("text",x=9*xlim/10,y=9*ylim/10,
+         #label=paste("Spearman's CC:",format(csp, digits=4)))+
+#annotate("text",x=8*xlim/10,y=8*ylim/10,
+         #label=paste("Pearson's CC:",format(cp, digits=4)))+
 print(p)
 ###################END BLOCK#####################
-
 
 #############X11 OUTPUT MANAGEMENT###############
 #################MODIFY IF NEEDED################
 #pause_output(options_vector)
 ###################END BLOCK#####################
-
-
