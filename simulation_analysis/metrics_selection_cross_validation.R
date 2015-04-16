@@ -87,39 +87,28 @@ setwd(execution_wd)
 require("reshape")
 n=length(args$filenames)
 ndf=read.table(args$filenames[1])
-#summary(ndf)
-m=min(ndf[which(!ndf$predictor=="predictor_clairvoyant"),]$RMSBSLD,na.rm=TRUE)
-ndf$valuation=ndf$RMSBSLD/m
+ndf=ndf[which(!is.na(ndf$avgbsld)),]
+m=min(ndf[which(!ndf$predictor=="predictor_clairvoyant"),]$avgbsld,na.rm=TRUE)
+ndf$valuation=(ndf$avgbsld/m)^2
 ndf$count= rep(1,nrow(ndf))
-ndf=ndf[,c("predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold","valuation","count")]
+ndf=ndf[,c("name","valuation","count")]
 
-#print(unique(ndf$pleftparam))
-#print(unique(ndf$pleftside))
-#print(unique(ndf$prightparam))
-#print(unique(ndf$prightside))
-#print(unique(ndf$threshold))
 
 for (i in 2:n-1){
   filename=args$filenames[i]
   data=read.table(filename)
-  m=min(data[which(!data$predictor=="predictor_clairvoyant"),]$RMSBSLD,na.rm=TRUE)
-  data$RMSBSLD=data$RMSBSLD/m
+  data=data[which(!is.na(data$avgbsld)),]
+
+  m=min(data[which(!data$predictor=="predictor_clairvoyant"),]$avgbsld,na.rm=TRUE)
+  data$avgbsld=(data$avgbsld/m)^2
   data$present=rep(1,nrow(data))
 
-  #print(unique(data$pleftparam))
-  #print(unique(data$pleftside))
-  #print(unique(data$prightparam))
-  #print(unique(data$prightside))
-  #print(unique(data$threshold))
-  #print(nrow(ndf[which(data$prightparam==0.00001),]))
+  ndf=merge(ndf,data,by="name")
 
-  ndf=merge(ndf,data,by=c("predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold"))
-
-
-  ndf$valuation=ndf$valuation+ndf$RMSBSLD
+  ndf$valuation=ndf$valuation+ndf$avgbsld
   ndf$count=ndf$count+ndf$present
 
-  ndf=ndf[,c("predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold","valuation","count")]
+  ndf=ndf[,c("name","valuation","count")]
 }
 
 ndf$SELECT=ndf$valuation/ndf$count
@@ -127,11 +116,11 @@ ndf$valuation=NULL
 
 prop_df=read.table(args$filenames[1])
 
-ndf=merge(ndf,prop_df,by=c("predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold"))
+ndf=merge(ndf,prop_df,by="name")
 ndf=ndf[which(!ndf$predictor=="predictor_clairvoyant"),]
 
 
-ndf$name=NULL
+#ndf$name=NULL
 ndf$length=NULL
 ndf$avgft=NULL
 ndf$avgstretch=NULL
@@ -142,10 +131,11 @@ ndf$maxbsld=NULL
 ndf$simultime=NULL
 ndf$hash=NULL
 ndf=ndf[with(ndf, order(SELECT)),]
-ndf$rank=c(1:nrow(ndf))
+#ndf$rank=c(1:nrow(ndf))
 #ndf$SELECT=NULL
 ndf$RMSFT=NULL
-ndf$avgbsld=NULL
+#ndf$avgbsld=NULL
+ndf$RMSBSLD=NULL
 
 write.table(ndf,paste(args$output,"/ranked_list",sep=""),sep="   ",row.names=FALSE)
 
@@ -158,14 +148,63 @@ write.table(ndf,paste(args$output,"/ranked_list",sep=""),sep="   ",row.names=FAL
 best_curve=ndf[1,]
 filename=args$filenames[n]
 data=read.table(filename)
-selected=merge(data,best_curve,by=c("predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold"))
-print(selected[,c("RMSBSLD.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")])
-write.table(selected[,c("RMSBSLD.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")],paste(args$output,"/validation",sep=""),sep="   ",row.names=TRUE)
+#summary(data$avgbsld)
+#print("HERE")
+data=data[which(!is.na(data$avgbsld)),]
+#print("tHERE")
 
-for (i in 1:6) {
-  draw_curve(ndf[i,],xlim=86600)
-  #draw_curve(ndf[i,])
+data=data[with(data, order(data$avgbsld)),]
+data$rank=c(1:nrow(data))
+
+#summary(data)
+#print(best_curve)
+#summary(data)
+
+print("THE BEST")
+print(best_curve$name)
+#print("of type:")
+#print(typeof(best_curve$name))
+#print("of length:")
+#print(nrow(best_curve))
+print("TO CHOOSE FROM:")
+print(data$name)
+#print("of  type:")
+#print(typeof(data$name))
+#print("of length:")
+#print(nrow(data))
+
+#print(which(data$name==best_curve$name))
+#selected=data[which(data$name==best_curve$name),]
+
+#print("OK,selected:")
+#print(selected$name)
+
+selected=merge(data,best_curve,by="name")
+#summary(selected)
+print(selected)
+
+#print(selected[,c("avgbsld.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")])
+
+pretty <- function (values,ranks) {
+  r=rep(1,length(values))
+  for (i in 1:length(values)) {
+    r[i]=paste(format(values[i],nsmall=1,digits=0),'/',ranks[i],sep="")
+  }
+  return(r)
 }
+
+T=selected[,c("rank","scheduler.x","predictor.x","corrector.x","RMSBSLD","pweight.x","pleftparam.x","prightparam.x","pleftside.x","prightside.x","pthreshold.x","avgbsld.x")]
+
+T$PRETTY=pretty(T$avgbsld.x,T$rank)
+
+write.table(T,paste(args$output,'/','validation',sep=''),row.names=FALSE)
+
+#write.table(selected[,c("avgbsld.x","predictor","scheduler","corrector","pweight","pleftparam","prightparam","pleftside","prightside","pthreshold")],paste(args$output,"/validation",sep=""),sep="   ",row.names=TRUE)
+
+#for (i in 1:6) {
+  #draw_curve(ndf[i,],xlim=86600)
+  ##draw_curve(ndf[i,])
+#}
 
 ###################END BLOCK#####################
 

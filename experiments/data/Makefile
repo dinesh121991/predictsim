@@ -57,6 +57,7 @@ cross_validate: filter
 	cat cross_validation_ceacurie/validation|column -s' ' -t > cross_validation_ceacurie/sel
 	rm cross_validation_ceacurie/ranked_list
 	rm cross_validation_ceacurie/validation
+	./cross_validate_join.sh
 
 learn: filter
 	./experiment_learn.sh
@@ -70,6 +71,7 @@ filter:
 #_____________CLEANING___________:
 clean:
 	rm -rf analysis/*
+	./cleaneasy.sh
 
 #clean:
 	#rm -rf $(DRY_PREDICTION_FOLDER)/* $(ANALYSIS_FOLDER)/* $(SWF_FOLDER)/* $(MEASUREMENTS_FOLDER)/* $(COEFFS_FOLDER)/* $(SIM_FOLDER)/* $(PRED_CPROFILE_FOLDER)/* $(SIM_CPROFILE_FOLDER)/* $(SIM_ANALYSIS_FOLDER)/*

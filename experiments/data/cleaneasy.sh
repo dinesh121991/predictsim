@@ -1,9 +1,7 @@
 #!/bin/bash
-rm summary.out
 
-for f in CEA-curie_sample CEA-curie CEA-curie_cut CTC-SP2 KTH-SP2 SDSC-BLUE SDSC-SP2 ;
+for f in cross_validation_ctcsp2 cross_validation_kthsp2 cross_validation_sdscblue cross_validation_ceacurie cross_validation_sdscsp2;
+
 do
-  cd $f
-  make clean
-  cd ..
+  rm $f/*
 done

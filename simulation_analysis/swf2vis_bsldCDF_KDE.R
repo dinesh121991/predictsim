@@ -29,13 +29,13 @@ source('Rscript/path.R')
 #description and epilog for the console help output.
 #e.g. description="This scripts does this and that."
 #e.g. epilog="use with caution. refer to www.site.com .."
-description='This script will give a summary of the data from the swf file.'
-epilog='You can input as many swf files as you wish.'
+description='This tool will plot system utilization for the whole log file.'
+epilog='You can input multiple swf files, they will be cat.'
 
 
 #External parser function: for usual options.
 #e.g. parser=parser_swf(description,epilog)
-parser=parser_cli_swf(description,epilog)
+parser=parser_swf_minimal(description,epilog)
 
 
 #additional argparse entries for this particular script.
@@ -43,8 +43,7 @@ parser=parser_cli_swf(description,epilog)
 
 #files you want to source from the rfold folder for this Rscript
 #e.g. c('common.R','histogram.R')
-userfiles=c('statistics.R','common.R')
-
+userfiles=c('common.R',"analysis.R","visu.R")
 ###################END BLOCK#####################
 
 
@@ -72,8 +71,8 @@ rm(parser,rfold,userfiles)
 
 #####################OUTPUT_MANAGEMENT###########
 ################MODIFY IF NEEDED####################
-#source('Rscript/output_management.R')
-#options_vector=set_output(args$device,args$output,args$ratio,execution_wd)
+source('Rscript/output_management.R')
+options_vector=set_output(args$device,args$output,args$ratio,execution_wd)
 ###################END BLOCK#####################
 
 
@@ -87,56 +86,59 @@ setwd(execution_wd)
 #use it to pause for output.
 #args for retrieving your arguments.
 
-#########
-#ranking
-df<-read.table(args$swf_filename)
-
-print(nrow(df))
-df1=df[which(df$predictor=="predictor_sgdlinear"&
-             df$pthreshold==0                   &
-             (df$prightside=="square"  |
-              df$prightside=="abs")             &
-             (df$pleftside=="abs"      |
-              df$pleftside=="square")           &
-             ((df$prightparam==1       &
-               df$pleftparam==100)         |
-              (df$prightparam==100     &
-               df$pleftparam==1)           |
-              (df$prightparam==1       &
-               df$pleftparam==1))
-             ),]
-
-df1=df[which(df$predictor=="predictor_sgdlinear"&
-             (df$pthreshold==0         |
-              df$pthreshold==60        |
-              df$pthreshold==600)               &
-             (df$prightside=="square"  |
-              df$prightside=="abs")             &
-             (df$pleftside=="abs"      |
-              df$pleftside=="square")           &
-             ((df$prightparam==1       &
-               df$pleftparam==100)         |
-              (df$prightparam==100     &
-               df$pleftparam==1)           |
-              (df$prightparam==1       &
-               df$pleftparam==1))
-             ),]
-
-df=rbind(df1,df[which(!df$predictor=="predictor_sgdlinear")
-                      ,])
-print(df[which(is.na(df$avgbsld)),])
 
 
-#summary(df)
-write.table(df,paste(args$output,'/','metrics_filtered',sep=''),sep="   ",row.names=TRUE)
+dfs=data.frame()
+maxes=c()
+means=c()
+median=c()
+squares=c()
+sqsum_above_10pc_val=c()
 
+for (i in 1:length(args$swf_filenames)){
+  swf_filename=args$swf_filenames[i]
+  data=swf_read(swf_filename)
+  #value=(data$wait_time+data$run_time)/data$run_time
+
+  data$ft=data$wait_time+data$run_time
+  value=pmax(1,data$ft/pmax(rep(10, nrow(data)),data$run_time))
+
+  means[i]=mean(value)
+  maxes[i]=max(value)
+  median[i]=median(value)
+  squares[i]=sum(value*value)/length(value)
+  sqsum_above_10pc_val[i]=sum(value[which(value>(0.5*maxes[i]))]^2)/length(value)
+  d=data.frame(value=value,type=character(length(value)))
+  d$type=swf_filename
+  dfs=rbind(dfs,d)
+}
+
+ggplot(dfs, aes(x = value))+
+geom_density(aes(group = type, colour = type))+
+coord_cartesian(xlim = c(1,100000))+
+scale_color_brewer(palette="Set3")
+
+p<-ggplot(dfs, aes(x = value))+
+stat_ecdf(aes(group = type, colour = type))+
+coord_cartesian(xlim = c(1,100000))+
+scale_color_brewer(palette="Set3")
+
+for (i in 1:length(args$swf_filenames)){
+  p=p+annotate("text", x =54000 , y = 0.6-0.05*i, label = args$swf_filenames[i])
+  p=p+annotate("text", x =50000 , y = 0.3-0.05*i, label = paste("Max: ",sprintf("%e",maxes[i])))
+  p=p+annotate("text", x =50000 , y = 0.4-0.05*i, label = paste("Median: ",sprintf("%e",median[i])))
+  p=p+annotate("text", x =50000 , y = 0.2-0.05*i, label = paste(" Mean :",sprintf("%2.0f",means[i])))
+  p=p+annotate("text", x =50000 , y = 0.1-0.05*i, label = paste(" MSBSLD:",sprintf("%1.1f",squares[i])))
+  p=p+annotate("text", x =50000 , y = 0.5-0.05*i, label = paste(" MSBSLD contrib of values above 50pc of max:",sprintf("%1.1f",sqsum_above_10pc_val[i])))
+  p=p+annotate("text", x =50000 , y = 0.55-0.05*i, label = paste(" MSBSLD contrib of values above 50pc(ratio):",sprintf("%1.1f",sqsum_above_10pc_val[i]/squares[i])))
+}
+print (p)
 
 ###################END BLOCK#####################
 
 
 #############X11 OUTPUT MANAGEMENT###############
 #################MODIFY IF NEEDED################
-#pause_output(options_vector)
+pause_output(options_vector)
 ###################END BLOCK#####################
-
 

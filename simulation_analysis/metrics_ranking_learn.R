@@ -95,10 +95,10 @@ dftrain<-read.table(args$filenames[1])
 dftest<-read.table(args$filenames[2])
 
 ranked=dftrain[which(!dftrain$predictor=="predictor_clairvoyant"),]
-ranked=ranked[with(ranked, order(RMSBSLD)), ]
+ranked=ranked[with(ranked, order(avgbsld)), ]
 best=ranked[1,]
 
-perf=dftest[which(dftest$name==best$name),(colnames(dftest) %in% c("scheduler","predictor","corrector","pweight","pleftside","prightside","RMSBSLD","pthreshold"))]
+perf=dftest[which(dftest$name==best$name),(colnames(dftest) %in% c("scheduler","predictor","corrector","pweight","pleftside","prightside","avgbsld","pthreshold"))]
 
 write.table(perf,args$output,row.names=FALSE)
 
