@@ -1,0 +1,100 @@
+CTC-SP2
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "corrector"       "predictor"              "rank"  "PRETTY"
+82.3329259389012  17.5716874376194  68.2662450866183  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_clairvoyant"  34      "17.6/34"
+402.749985399063  30.0410695214457  150.930570034506  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_reqtime"      286     "30.0/286"
+689.199905327176  37.1654014851933  152.619122446632  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_clairvoyant"  377     "37.2/377"
+1153.77676996124  49.5712902189859  228.340632409705  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_reqtime"      508     "49.6/508"
+2344.79494805968  85.7671720640577  993.394649299124  "easy_plus_plus_scheduler"            "tsafrir"         "predictor_tsafrir"      691     "85.8/691"
+#Global and Algo-wise ranks of the clairvoyants schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "rank"  "algo_rank"  "PRETTY"
+82.3329259389012  17.5716874376194  68.2662450866183  "easy_plus_plus_scheduler"  34      34           "17.6/34"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "rank"  "algo_rank"  "PRETTY"
+689.199905327176  37.1654014851933  152.619122446632  "easy_prediction_backfill_scheduler"  377     102          "37.2/377"
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "predictor"            "rank"  "algo_rank"  "PRETTY"
+204.337780827701  15.847532543899   196.606619331256  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  1       1            "15.8/1"
+2740.70882897018  143.567460490138  2342.71699638874  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  728     366          "143.6/728"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "predictor"            "rank"  "algo_rank"  "PRETTY"
+249.273540534259  25.3046229423465  195.452347823199  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  98      1            "25.3/98"
+8034.42460708203  202.837896613542  1824.08997278568  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  732     366          "202.8/732"
+KTH-SP2
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "corrector"       "predictor"              "rank"  "PRETTY"
+1223.14049527385  49.8477189313406  326.20971934787   "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_clairvoyant"  1       "49.8/1"
+1987.30140424154  63.5006771704074  535.363295504029  "easy_plus_plus_scheduler"            "tsafrir"         "predictor_tsafrir"      198     "63.5/198"
+1821.52104429369  69.4054005803035  427.204830733767  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_reqtime"      356     "69.4/356"
+1394.79406340383  71.7223851124418  368.666676974225  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_clairvoyant"  446     "71.7/446"
+2014.70734059169  92.5765397336295  476.260314538994  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_reqtime"      715     "92.6/715"
+#Global and Algo-wise ranks of the clairvoyants schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"        "scheduler"                 "rank"  "algo_rank"  "PRETTY"
+1223.14049527385  49.8477189313406  326.20971934787  "easy_plus_plus_scheduler"  1       1            "49.8/1"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "rank"  "algo_rank"  "PRETTY"
+1394.79406340383  71.7223851124418  368.666676974225  "easy_prediction_backfill_scheduler"  446     86           "71.7/446"
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "predictor"            "rank"  "algo_rank"  "PRETTY"
+1392.8323969517   50.2552614955741  523.247432965547  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  2       2            "50.3/2"
+1937.65943487118  74.5367331778204  458.690337962114  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  515     366          "74.5/515"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "predictor"            "rank"  "algo_rank"  "PRETTY"
+1675.84364456353  62.6042872762256  596.429986840139  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  181     1            "62.6/181"
+2021.63104360586  94.5005081465727  502.798798343026  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  732     366          "94.5/732"
+SDSC-SP2
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "corrector"       "predictor"              "rank"  "PRETTY"
+231.276107937367  56.836221269454   228.169525853237  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_clairvoyant"  1       "56.8/1"
+265.453963619397  70.4779419668026  240.340390392948  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_clairvoyant"  12      "70.5/12"
+460.437892332373  79.3962818520491  379.394026879663  "easy_plus_plus_scheduler"            "tsafrir"         "predictor_tsafrir"      115     "79.4/115"
+417.830973450972  84.8889445442655  346.704807721802  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_reqtime"      312     "84.9/312"
+393.782345203137  87.8703241921987  305.727712197242  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_reqtime"      452     "87.9/452"
+#Global and Algo-wise ranks of the clairvoyants schedulers
+"RMSS"            "avgbsld"        "RMSBSLD"         "scheduler"                 "rank"  "algo_rank"  "PRETTY"
+231.276107937367  56.836221269454  228.169525853237  "easy_plus_plus_scheduler"  1       1            "56.8/1"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "rank"  "algo_rank"  "PRETTY"
+265.453963619397  70.4779419668026  240.340390392948  "easy_prediction_backfill_scheduler"  12      1            "70.5/12"
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "predictor"            "rank"  "algo_rank"  "PRETTY"
+323.93093682393   65.2825965565616  315.754203383278  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  3       3            "65.3/3"
+1250.51982935602  194.789419688891  1249.73593366868  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  731     366          "194.8/731"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "predictor"            "rank"  "algo_rank"  "PRETTY"
+474.329952484677  70.5191537674416  298.661338018583  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  13      2            "70.5/13"
+396.796022989396  103.607784840851  355.942936640213  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  687     365          "103.6/687"
+CEA-curie
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "corrector"       "predictor"              "rank"  "PRETTY"
+613.23739664814   12.079795446879   143.822306002013  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_clairvoyant"  1       "12.1/1"
+1053.06762578667  69.9259347073813  404.71868058244   "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_clairvoyant"  158     "69.9/158"
+2555.45372337679  169.030310143181  991.435485755374  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_reqtime"      308     "169.0/308"
+12148.5236777164  193.471297793165  3543.00772738927  "easy_plus_plus_scheduler"            "tsafrir"         "predictor_tsafrir"      381     "193.5/381"
+2602.42555581926  202.133161662561  1093.10914948815  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_reqtime"      438     "202.1/438"
+#Global and Algo-wise ranks of the clairvoyants schedulers
+"RMSS"           "avgbsld"        "RMSBSLD"         "scheduler"                 "rank"  "algo_rank"  "PRETTY"
+613.23739664814  12.079795446879  143.822306002013  "easy_plus_plus_scheduler"  1       1            "12.1/1"
+"RMSS"            "avgbsld"         "RMSBSLD"        "scheduler"                           "rank"  "algo_rank"  "PRETTY"
+1053.06762578667  69.9259347073813  404.71868058244  "easy_prediction_backfill_scheduler"  158     77           "69.9/158"
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "predictor"            "rank"  "algo_rank"  "PRETTY"
+2992.64879596455  24.2711076484225  1588.9623481895   "easy_plus_plus_scheduler"  "predictor_sgdlinear"  3       3            "24.3/3"
+260723.108131408  11657.0235402851  91352.2241806064  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  707     354          "%#4.0-1e/707"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "predictor"            "rank"  "algo_rank"  "PRETTY"
+2042.26867159053  26.3277763422255  1104.860813975    "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  13      1            "26.3/13"
+149246.342466041  9348.78047584562  75027.9427422531  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  706     353          "9348.8/706"
+SDSC-BLUE
+#Global ranks of the Clairvoyant(x2), EASY FCFS and EASY++ algorithms
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "corrector"       "predictor"              "rank"  "PRETTY"
+77.7943947457703  13.1775880058696  73.6761572053337  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_clairvoyant"  23      "13.2/23"
+118.610145477339  19.8260115151715  115.173165450106  "easy_plus_plus_scheduler"            "throw_an_error"  "predictor_reqtime"      169     "19.8/169"
+231.472208498429  20.9864307955655  230.665855495758  "easy_plus_plus_scheduler"            "tsafrir"         "predictor_tsafrir"      271     "21.0/271"
+121.956258439732  30.6214539423518  118.417382720582  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_clairvoyant"  376     "30.6/376"
+162.103863039263  36.5233635393129  158.644405999053  "easy_prediction_backfill_scheduler"  "throw_an_error"  "predictor_reqtime"      588     "36.5/588"
+#Global and Algo-wise ranks of the clairvoyants schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "rank"  "algo_rank"  "PRETTY"
+77.7943947457703  13.1775880058696  73.6761572053337  "easy_plus_plus_scheduler"  23      23           "13.2/23"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "rank"  "algo_rank"  "PRETTY"
+121.956258439732  30.6214539423518  118.417382720582  "easy_prediction_backfill_scheduler"  376     78           "30.6/376"
+#Global and Algo-wise maximal and minimal ranks of the predictive schedulers
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                 "predictor"            "rank"  "algo_rank"  "PRETTY"
+133.345642990202  10.6730561308205  129.667279297649  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  1       1            "10.7/1"
+2681.84315542622  60.2852241592178  2681.76221455748  "easy_plus_plus_scheduler"  "predictor_sgdlinear"  732     366          "60.3/732"
+"RMSS"            "avgbsld"         "RMSBSLD"         "scheduler"                           "predictor"            "rank"  "algo_rank"  "PRETTY"
+134.012212765469  15.7689766133713  122.867773266273  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  34      1            "15.8/34"
+635.256853311109  47.9900090213603  632.809814634112  "easy_prediction_backfill_scheduler"  "predictor_sgdlinear"  724     366          "48.0/724"
