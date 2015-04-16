@@ -8,19 +8,30 @@ FILES5=Metacentrum2013/sim_analysis/metrics_filtered KTH-SP2/sim_analysis/metric
 FILES6=KTH-SP2/sim_analysis/metrics_filtered CTC-SP2/sim_analysis/metrics_filtered SDSC-BLUE/sim_analysis/metrics_filtered SDSC-SP2/sim_analysis/metrics_complete CEA-curie/sim_analysis/metrics_filtered Metacentrum2013/sim_analysis/metrics_filtered
 
 compare_traces: filter
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R  -o analysis/scatter_rankings_scheduler_predictor_KTH-SP2_CTC-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_CTC-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_CTC-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-SP2/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-SP2_KTH-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_KTH-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R SDSC-BLUE/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_scheduler_predictor_SDSC-BLUE_SDSC-SP2.pdf -r 1
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R KTH-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_KTH-SP2_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-SP2/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-SP2_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete CTC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_CTC-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-SP2/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-SP2_KTH-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete KTH-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_KTH-SP2.pdf -r 2
-	../../simulation_analysis/metrics_compare_rankings_scheduler_weight.R SDSC-BLUE/sim_analysis/metrics_complete SDSC-SP2/sim_analysis/metrics_complete -o analysis/scatter_rankings_weight_SDSC-BLUE_SDSC-SP2.pdf -r 2
-	ranger analysis
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	SDSC-BLUE/sim_analysis/metrics_filtered         KTH-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b1.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	SDSC-BLUE/sim_analysis/metrics_filtered         CTC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b2.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	SDSC-BLUE/sim_analysis/metrics_filtered         Metacentrum2013/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b3.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	SDSC-BLUE/sim_analysis/metrics_filtered         CEA-curie/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b4.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	SDSC-BLUE/sim_analysis/metrics_filtered         SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b5.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	KTH-SP2/sim_analysis/metrics_filtered           CTC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b6.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	KTH-SP2/sim_analysis/metrics_filtered           Metacentrum2013/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b7.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	KTH-SP2/sim_analysis/metrics_filtered           CEA-curie/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b8.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	KTH-SP2/sim_analysis/metrics_filtered           SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b9.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	CTC-SP2/sim_analysis/metrics_filtered           Metacentrum2013/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b10.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	CTC-SP2/sim_analysis/metrics_filtered           CEA-curie/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b11.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	CTC-SP2/sim_analysis/metrics_filtered           SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b12.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	Metacentrum2013/sim_analysis/metrics_filtered   CEA-curie/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b13.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	Metacentrum2013/sim_analysis/metrics_filtered   SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b14.pdf -r 1
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	CEA-curie/sim_analysis/metrics_filtered         SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b15.pdf -r 1
+
+scatterplot:
+	../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	KTH-SP2/sim_analysis/metrics_filtered           SDSC-SP2/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b9.pdf -r 1
+	#../../simulation_analysis/metrics_compare_rankings_scheduler_predictor.R 	Metacentrum2013/sim_analysis/metrics_filtered   CEA-curie/sim_analysis/metrics_filtered  -o analysis/scatter_rankings_scheduler_predictor_a1_b13.pdf -r 1
+
+
+
+
+	#ranger analysis
 
 #mkdir cross_validation_sdscblue
 #mkdir cross_validation_kthsp2
