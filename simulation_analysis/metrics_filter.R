@@ -107,8 +107,7 @@ print(nrow(df))
              #),]
 
 df1=df[which(df$predictor=="predictor_sgdlinear"&
-             (df$pweight=="1" |
-             df$pweight=="5+log(r/m)")           &
+             df$scheduler=="easy_plus_plus_scheduler"&
              df$pthreshold==0                   &
              (df$prightside=="square"  |
               df$prightside=="abs")             &
@@ -122,7 +121,9 @@ df1=df[which(df$predictor=="predictor_sgdlinear"&
                df$pleftparam==1))
              ),]
 
-df=rbind(df1,df[which(!df$predictor=="predictor_sgdlinear"),])
+df=rbind(df1,df[which((!df$predictor=="predictor_sgdlinear") &
+                      df$scheduler=="easy_plus_plus_scheduler")
+                      ,])
 print(nrow(df))
 
 
