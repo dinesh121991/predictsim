@@ -106,19 +106,39 @@ summary(result)
 csp = cor(result$avgbsld.x , result$avgbsld.y  , method = "spearman")
 cp = cor(result$avgbsld.x , result$avgbsld.y  , method = "pearson")
 
+
+
+theme_bwTUNED<-function()
+{
+	return(theme_bw() +theme(
+		plot.title = element_text(face="bold", size=14),
+		axis.title.x = element_text(face="bold", size=14),
+		axis.title.y = element_text(face="bold", size=14, angle=90),
+		axis.text.x = element_text(size=10),
+		axis.text.y = element_text(size=10),
+		panel.grid.minor = element_blank(),
+# 		panel.grid = element_blank(),
+		legend.key = element_rect(colour="white")))
+}
+
+
 xlim=max(result$avgbsld.x)
 ylim=max(result$avgbsld.y)
 p=ggplot(result, aes(x=avgbsld.x,y=avgbsld.y))+
 geom_point(aes(colour=factor(scheduler),shape=factor(predictor)))+
 xlab(paste("AVGBSLD for KTH-SP2"))+
 ylab(paste("AVGBSLD for CTC-SP2"))+
-theme(legend.justification=c(1,0), legend.position=c(0.8,0.4))+
-scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"), 
-                       name="Experimental\nCondition",
-                       breaks=c("ctrl", "trt1", "trt2"),
-                       labels=c("Control", "Treatment 1", "Treatment 2"))+
-ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
-scale_colour_grey()
+theme_bwTUNED()+
+theme(legend.justification=c(1,0), legend.position=c(0.85,0.7), legend.box="horizontal", legend.box.just="top")+
+scale_colour_manual(values=c("#000000", "#999999"), 
+                       name="Scheduler",
+                       breaks=c("easy_prediction_backfill_scheduler", "easy_plus_plus_scheduler"),
+                       labels=c("EASY", "EASY++"))+
+scale_shape_discrete(name="Predictor",
+                        breaks=c("predictor_clairvoyant", "predictor_double_reqitme", "predictor_reqtime", "predictor_sgdlinear", "predictor_tsafrir"),
+                        labels=c("Clairvoyant", "DOUBLE", "REQTIME", "SGDLINEAR", "TSAFRIR"))
+# ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
+
 
 #annotate("text",x=9*xlim/10,y=9*ylim/10,
          #label=paste("Spearman's CC:",format(csp, digits=4)))+
