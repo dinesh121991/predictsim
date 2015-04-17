@@ -129,18 +129,18 @@ plot_rec_curves <- function(preds,labelnames){
   theme_bwTUNED()+
   scale_linetype_manual(values=c("solid", 11,"dashed","dotdash","dotted"),
                        name="Prediction Method",
-                       labels=c("Actual value","E-Loss Regression", "Requested Time", "Squared Loss Regression","AVE(2)")
+                       labels=c("Actual value","E-Loss Regression", "Requested Time", "Squared Loss Regression",expression(AVE[2]^(k)))
                       )+
 scale_colour_manual(values=c("#000000","#5e3c99", "#fdb863","#b2abd2","#e66101"),
                        name="Prediction Method",
-                       labels=c("Actual value","E-Loss Regression", "Requested Time", "Squared Loss Regression","AVE(2)"))+
+                       labels=c("Actual value","E-Loss Regression", "Requested Time", "Squared Loss Regression",expression(AVE[2]^(k))))+
   stat_ecdf(aes(group = type))+
   coord_cartesian(xlim = c(0, 100000)) +
   scale_x_continuous(breaks=c(21600,43200,64800,86400),
                      labels=c(6,12,18,24))+
   ylab("Cumulative Density")+
   xlab("Predicted Value (hours)")+
-theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top")
+theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top",legend.text.align=0)
   #scale_color_brewer(palette="Set3")
 
   ggsave("rec_pred.pdf",p0,width=5,height=4)

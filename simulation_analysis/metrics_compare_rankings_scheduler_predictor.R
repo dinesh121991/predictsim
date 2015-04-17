@@ -136,7 +136,7 @@ geom_point(aes(colour=factor(scheduler),shape=factor(predictor)))+
 xlab("AVGBSLD for SDSC-BLUE")+
 ylab("AVGBSLD for MetaCentrum")+
 theme_bwTUNED()+
-theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizontal", legend.box.just="top")+
+theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizontal", legend.box.just="top",legend.text.align=0)+
 scale_colour_manual(values=c("#000000", "#999999"),
                        name="Scheduler",
                        breaks=c("easy_prediction_backfill_scheduler", "easy_plus_plus_scheduler"),
@@ -144,7 +144,7 @@ scale_colour_manual(values=c("#000000", "#999999"),
 scale_shape_discrete(name="Prediction Method",
                      solid=FALSE,
                        breaks=c("predictor_clairvoyant", "predictor_double_reqitme", "predictor_reqtime", "predictor_sgdlinear", "predictor_tsafrir"),
-                       labels=c("Clairvoyant", "Recursive Doubling", "Requested Time", "Machine Learning", "AVE(2)"))
+                       labels=c("Clairvoyant", "Recursive Doubling", "Requested Time", "Machine Learning", expression(AVE[2]^(k)) ))
 # ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
 
 

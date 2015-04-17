@@ -131,18 +131,18 @@ plot_rec_curves <- function(preds,true_values,labelnames){
   theme_bwTUNED()+
   scale_linetype_manual(values=c(11,"dashed","dotdash","dotted"),
                        name="Prediction Method",
-                       labels=c("E-Loss Regression", "Requested Time", "Squared Loss Regression","AVE(2)")
+                       labels=c("E-Loss Regression", "Requested Time", "Squared Loss Regression",expression(AVE[2]^(k)))
                       )+
 scale_colour_manual(values=c("#5e3c99", "#fdb863","#b2abd2","#e66101"),
                        name="Prediction Method",
-                       labels=c("E-Loss Regression", "Requested Time", "Squared Loss Regression","AVE(2)"))+
+                       labels=c("E-Loss Regression", "Requested Time", "Squared Loss Regression",expression(AVE[2]^(k))))+
 stat_ecdf(aes(group = type))+
 coord_cartesian(xlim = c(-100000, 100000)) +
   scale_x_continuous(breaks=c(-21600,-43200,-64800,-86400,0,21600,43200,64800,86400),
                      labels=c(-6,-12,-18,-24,0,6,12,18,24))+
 ylab("Cumulative Density")+
 xlab("Prediction Error(hours)")+
-theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top")
+theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top",legend.text.align=0)
 #ggtitle("Cumulative distribution of prediction errors.")
 
 #annotate("text", x =0.1*mi+0.9+ma , y = 0.5, label = "Over-Prediction\n Pure Backfill Mechanism")+
