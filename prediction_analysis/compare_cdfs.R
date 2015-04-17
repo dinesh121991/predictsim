@@ -125,23 +125,25 @@ plot_rec_curves <- function(preds,labelnames){
 
 
   print(summary(preds_dfs))
-  p0 = ggplot(preds_dfs, aes(x = value, linetype=type)) +
+  p0 = ggplot(preds_dfs, aes(x = value, linetype=type,colour=type)) +
   theme_bwTUNED()+
-  scale_linetype_manual(values=c(11, "solid","dashed","dotdash","dotted","dashed"),
-                       name="Prediction\nMethod",
-                       labels=c("Actual value","E-Loss\n Regression", "Reqtime", "Squared Loss\n Regression","AVG(2)")
+  scale_linetype_manual(values=c("solid", 11,"dashed","dotdash","dotted"),
+                       name="Prediction Method",
+                       labels=c("Actual value","E-Loss Regression", "Reqtime", "Squared Loss Regression","AVG(2)")
                       )+
-#scale_colour_manual(values=c("#000000","#999999","#000000","#999999"))+
+scale_colour_manual(values=c("#000000","#5e3c99", "#fdb863","#b2abd2","#e66101"),
+                       name="Prediction Method",
+                       labels=c("Actual value","E-Loss Regression", "Reqtime", "Squared Loss Regression","AVG(2)"))+
   stat_ecdf(aes(group = type))+
   coord_cartesian(xlim = c(0, 100000)) +
   scale_x_continuous(breaks=c(21600,43200,64800,86400),
                      labels=c(6,12,18,24))+
   ylab("Cumulative Density")+
   xlab("Predicted Value (hours)")+
-theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizontal", legend.box.just="top")
+theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top")
   #scale_color_brewer(palette="Set3")
 
-  ggsave("rec_pred.pdf",p0,width=5,height=4)
+  ggsave("rec_pred.pdf",p0,width=6,height=5)
 
   #m <- ggplot(d, aes(x=value))
   #m +
