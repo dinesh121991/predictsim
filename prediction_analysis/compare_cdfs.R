@@ -143,7 +143,7 @@ scale_colour_manual(values=c("#000000","#5e3c99", "#fdb863","#b2abd2","#e66101")
 theme(legend.justification=c(1,0), legend.position=c(0.95,0.01), legend.box="horizontal", legend.box.just="top")
   #scale_color_brewer(palette="Set3")
 
-  ggsave("rec_pred.pdf",p0,width=6,height=5)
+  ggsave("rec_pred.pdf",p0,width=5,height=4)
 
   #m <- ggplot(d, aes(x=value))
   #m +
