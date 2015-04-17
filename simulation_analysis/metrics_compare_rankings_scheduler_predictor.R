@@ -100,7 +100,14 @@ df2<-read.table(args$filenames[2])
 df1 = df1[,(colnames(df1) %in% c("name","avgbsld","predictor","scheduler"))]
 df2 = df2[,(colnames(df2) %in% c("name","avgbsld"))]
 result=merge(df1, df2, by="name")
-result=result[which(!is.na(result$avgbsld.x) & !is.na(result$avgbsld.y) & !result$predictor=="easy_backfill" & !result$predictor=="easy_backfill"),]
+result=result[which(!is.na(result$avgbsld.x) &
+                    !is.na(result$avgbsld.y) &
+                    (result$scheduler=="easy_prediction_backfill_scheduler" |
+                     result$scheduler=="easy_plus_plus_scheduler") &
+                    (result$predictor=="predictor_sgdlinear"  |
+                     result$predictor=="predictor_tsafrir"  |
+                     result$predictor=="predictor_reqtime"  |
+                     result$predictor=="predictor_clairvoyant")),]
 summary(result)
 
 csp = cor(result$avgbsld.x , result$avgbsld.y  , method = "spearman")
@@ -111,9 +118,9 @@ cp = cor(result$avgbsld.x , result$avgbsld.y  , method = "pearson")
 theme_bwTUNED<-function()
 {
 	return(theme_bw() +theme(
-		plot.title = element_text(face="bold", size=14),
-		axis.title.x = element_text(face="bold", size=14),
-		axis.title.y = element_text(face="bold", size=14, angle=90),
+		plot.title = element_text(face="bold", size=10),
+		axis.title.x = element_text(face="bold", size=10),
+		axis.title.y = element_text(face="bold", size=10, angle=90),
 		axis.text.x = element_text(size=10),
 		axis.text.y = element_text(size=10),
 		panel.grid.minor = element_blank(),
@@ -126,17 +133,18 @@ xlim=max(result$avgbsld.x)
 ylim=max(result$avgbsld.y)
 p=ggplot(result, aes(x=avgbsld.x,y=avgbsld.y))+
 geom_point(aes(colour=factor(scheduler),shape=factor(predictor)))+
-xlab(paste("AVGBSLD for KTH-SP2"))+
-ylab(paste("AVGBSLD for CTC-SP2"))+
+xlab("AVGBSLD for SDSC-BLUE")+
+ylab("AVGBSLD for MetaCentrum")+
 theme_bwTUNED()+
-theme(legend.justification=c(1,0), legend.position=c(0.85,0.7), legend.box="horizontal", legend.box.just="top")+
-scale_colour_manual(values=c("#000000", "#999999"), 
+theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizontal", legend.box.just="top")+
+scale_colour_manual(values=c("#000000", "#999999"),
                        name="Scheduler",
                        breaks=c("easy_prediction_backfill_scheduler", "easy_plus_plus_scheduler"),
-                       labels=c("EASY", "EASY++"))+
+                       labels=c("EASY-FCFS", "EASY-SJBF"))+
 scale_shape_discrete(name="Predictor",
-                        breaks=c("predictor_clairvoyant", "predictor_double_reqitme", "predictor_reqtime", "predictor_sgdlinear", "predictor_tsafrir"),
-                        labels=c("Clairvoyant", "DOUBLE", "REQTIME", "SGDLINEAR", "TSAFRIR"))
+                     solid=FALSE,
+                       breaks=c("predictor_clairvoyant", "predictor_double_reqitme", "predictor_reqtime", "predictor_sgdlinear", "predictor_tsafrir"),
+                       labels=c("Clairvoyant", "DOUBLE", "REQTIME", "Machine Learning", "AVG(2)"))
 # ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
 
 

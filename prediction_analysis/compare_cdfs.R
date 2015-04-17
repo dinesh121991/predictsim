@@ -108,11 +108,40 @@ plot_rec_curves <- function(preds,labelnames){
     preds_dfs=rbind(preds_dfs,d)
   }
 
+
+
+  theme_bwTUNED<-function()
+  {
+    return(theme_bw() +theme(
+                             plot.title = element_text(face="bold", size=11),
+                             axis.title.x = element_text(face="bold", size=11),
+                             axis.title.y = element_text(face="bold", size=11, angle=90),
+                             axis.text.x = element_text(size=10),
+                             axis.text.y = element_text(size=10),
+                             panel.grid.minor = element_blank(),
+                             # 		panel.grid = element_blank(),
+                             legend.key = element_rect(colour="white")))
+  }
+
+
   print(summary(preds_dfs))
-  p0 = ggplot(preds_dfs, aes(x = value)) +
-  stat_ecdf(aes(group = type, colour = type))+
-  scale_color_brewer(palette="Set3")
-  print(p0)
+  p0 = ggplot(preds_dfs, aes(x = value, linetype=type)) +
+  theme_bwTUNED()+
+  scale_linetype_manual(values=c(11, "solid","dashed","dotdash","dotted","dashed"),
+                       name="Prediction\nMethod",
+                       labels=c("Actual value","E-Loss\n Regression", "Reqtime", "Squared Loss\n Regression","AVG(2)")
+                      )+
+#scale_colour_manual(values=c("#000000","#999999","#000000","#999999"))+
+  stat_ecdf(aes(group = type))+
+  coord_cartesian(xlim = c(0, 100000)) +
+  scale_x_continuous(breaks=c(21600,43200,64800,86400),
+                     labels=c(6,12,18,24))+
+  ylab("Cumulative Density")+
+  xlab("Predicted Value (hours)")+
+theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizontal", legend.box.just="top")
+  #scale_color_brewer(palette="Set3")
+
+  ggsave("rec_pred.pdf",p0,width=5,height=4)
 
   #m <- ggplot(d, aes(x=value))
   #m +
