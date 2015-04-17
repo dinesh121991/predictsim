@@ -127,14 +127,15 @@ plot_rec_curves <- function(preds,true_values,labelnames){
   mi=min(preds_dfs$value)
   ma=max(preds_dfs$value)
 
-  p0 = ggplot(preds_dfs, aes(x = value,linetype=type)) +
-  #theme_grey()+
+  p0 = ggplot(preds_dfs, aes(x = value,colour=type,linetype=type)) +
   theme_bwTUNED()+
   scale_linetype_manual(values=c("solid","dashed","dotdash","dotted","dashed"),
                        name="Prediction\nMethod",
                        labels=c("E-Loss\n Regression", "Reqtime", "Squared Loss\n Regression","AVG(2)")
                       )+
-#scale_colour_manual(values=c("#000000","#999999","#000000","#999999"))+
+scale_colour_manual(values=c("#e66101","#fdb863","#b2abd2","#5e3c99"),
+                       name="Prediction\nMethod",
+                       labels=c("E-Loss\n Regression", "Reqtime", "Squared Loss\n Regression","AVG(2)"))+
 stat_ecdf(aes(group = type))+
 coord_cartesian(xlim = c(-100000, 100000)) +
   scale_x_continuous(breaks=c(-21600,-43200,-64800,-86400,0,21600,43200,64800,86400),
