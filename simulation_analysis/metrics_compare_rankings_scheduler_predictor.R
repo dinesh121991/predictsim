@@ -140,11 +140,11 @@ theme(legend.justification=c(1,0), legend.position=c(0.95,0), legend.box="horizo
 scale_colour_manual(values=c("#000000", "#999999"),
                        name="Scheduler",
                        breaks=c("easy_prediction_backfill_scheduler", "easy_plus_plus_scheduler"),
-                       labels=c("EASY-FCFS", "EASY-SJBF"))+
-scale_shape_discrete(name="Predictor",
+                       labels=c("EASY", "EASY-SJBF"))+
+scale_shape_discrete(name="Prediction Method",
                      solid=FALSE,
                        breaks=c("predictor_clairvoyant", "predictor_double_reqitme", "predictor_reqtime", "predictor_sgdlinear", "predictor_tsafrir"),
-                       labels=c("Clairvoyant", "DOUBLE", "REQTIME", "Machine Learning", "AVG(2)"))
+                       labels=c("Clairvoyant", "Recursive Doubling", "Requested Time", "Machine Learning", "AVE(2)"))
 # ggtitle("Scatter plot of algorithm's relative performance between the KTH-SP2 and SCDC-SP2 logs.")+
 
 
