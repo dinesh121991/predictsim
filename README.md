@@ -22,17 +22,14 @@ experiments/data/Metacentrum2013/sim_analysis/metrics_complete
 Scheduling Simulator
 ====================
 The Scheduling simulator used in this paper is a fork of the pyss open source scheduler. It found in the folder:
+
 simulation/pyss/src
 
 Machine Learning Algorithms
 ===========================
 Implementations of the NAG algorithm for learning the model are located at:
+
 simulation/pyss/src/predictors/
 
-Replicating Experiments
-=======================
-in each log folder in experiments/data/, the following make targets are available:
-
-
-Necessary R stuff:
-install.packages("argparse","ggplot2","gridExtra")
+<!--Necessary R stuff:-->
+<!--install.packages("argparse","ggplot2","gridExtra")-->
