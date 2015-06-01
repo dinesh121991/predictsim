@@ -30,7 +30,7 @@ from datetime import datetime
 
 def parse_and_run_simulator(options):
 
-	if options["input_file"] is None:
+	if "input_file" not in options:
 		parser.error("missing input file")
 
 
@@ -39,7 +39,7 @@ def parse_and_run_simulator(options):
 	else:
 		input_file = open(options["input_file"])
 
-	if options["num_processors"] is None:
+	if "num_processors" not in options:
 		input_file = open(options["input_file"])
 		for line in input_file:
 			if(line.lstrip().startswith(';')):
@@ -50,10 +50,10 @@ def parse_and_run_simulator(options):
 					continue
 			else:
 				break
-	if options["num_processors"] is None:
+	if "num_processors" not in options:
 		parser.error("missing num processors")
 
-	if options["stats"] is None:
+	if "stats" not in options:
 		options["stats"] = False
 	
 	if "progressbar" not in options["scheduler"]:
@@ -62,10 +62,10 @@ def parse_and_run_simulator(options):
 		else:# You're being piped or redirected
 			options["scheduler"]["progressbar"] = False
 
-	if options["scheduler"] is None:
+	if "scheduler"  not in options:
 		parser.error("missing scheduler")
 
-	if options["scheduler"]["name"] is None:
+	if "name" not in options["scheduler"]:
 		parser.error("missing scheduler name")
 
 
