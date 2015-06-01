@@ -24,6 +24,18 @@ pypy: ~6 time faster than python2 on my computer
 ... : the python scripts with args.
 
 
+** Batch mode
+run_valexpe_client.py and run_valexpe_server.py can run batchs of simulations distributed among several computers.
+A SSH passwordless connection from the clients to the server should be available.
+Configure the directory in run_valexpe_client.py.
+The set-up the run_valexpe_server.py
+Set your expe_name, num_processors and dict_path.
+Then ./run_valexpe_server.py init_db .
+You are ready to launch your clients: pypy -OO run_valexpe_client.py serverhost num_thread
+Copy finished experiments with ./run_valexpe_server.py copy (on clients)
+
+run_valexpe_server.py stats gives stats based on the swf files.
+run_valexpe_server.py stats_db gives stats based on the database.
 
 
 *** Notes on schedulers:
