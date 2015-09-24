@@ -1,7 +1,7 @@
 Improving Backfilling by using Machine Learning to predict Running Times.
 =========================================================================
 
-This repository is home to the scheduling simulator, machine learning tools, and experimental results from the SC'15 submission "Improving Backfilling by using Machine Learning to predict Running Times".
+This repository is home to the scheduling simulator, machine learning tools, and experimental results from the SC'15 submission [Improving Backfilling by using Machine Learning to predict Running Times](freux.fr/papers/SC15_backfilling_with_ML_runtime_predictions.pdf)
 
 Experimental Results
 ====================
