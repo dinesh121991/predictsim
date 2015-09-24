@@ -3,6 +3,41 @@
 the Python Scheduler Simulator
 
 
+
+
+*** Run exemples:
+
+
+** normal run:
+./run_simulator.py 5K_sample sample_config.py res.swf 
+
+** profiling/optimizing:
+(after a "make" in ../../../experiments/data/CEA-curie_sample/ )
+time pypy -OO -m cProfile -o simul.cprof ./run_simulator.py '../../../experiments/data/CEA-curie_sample/swf_unfiltered/log.swf' sample_config_profiling.py res.swf 
+
+runsnake simul.cprof
+
+time: measure running time
+pypy: ~6 time faster than python2 on my computer
+-OO: python in optimized mode
+-m cProfile -o simul.cprof: generate a profile, very useful.
+... : the python scripts with args.
+
+
+** Batch mode
+run_valexpe_client.py and run_valexpe_server.py can run batchs of simulations distributed among several computers.
+A SSH passwordless connection from the clients to the server should be available.
+Configure the directory in run_valexpe_client.py.
+The set-up the run_valexpe_server.py
+Set your expe_name, num_processors and dict_path.
+Then ./run_valexpe_server.py init_db .
+You are ready to launch your clients: pypy -OO run_valexpe_client.py serverhost num_thread
+Copy finished experiments with ./run_valexpe_server.py copy (on clients)
+
+run_valexpe_server.py stats gives stats based on the swf files.
+run_valexpe_server.py stats_db gives stats based on the database.
+
+
 *** Notes on schedulers:
 ** alpha_easy_scheduler
 Useless scheduler.
@@ -79,98 +114,9 @@ EasyBackfillScheduler where predicted_runtime is doubled when backfilling is don
 
 
 
+*** Other notes:
 
-time pypy -OO -m cProfile -o simul.cprof ./run_simulator.py '../../../experiments/data/CEA-curie_sample/swf_unfiltered/log.swf' sample_config_profiling.py res.swf
-
-
-
-
-
-
-*** Run exemples:
-
-** normal run:
-time pypy -OO -m cProfile -o simul.cprof ./run_simulator.py sample_config_profiling.py
-
-
-** debug:
-pypy ./run_simulator.py sample_config.py
-
-
-** profiling/optimizing:
-time pypy -OO -m cProfile -o simul.cprof ./run_simulator.py sample_config_profiling.py
-
-time pypy -OO -m cProfile -o simul.cprof ./run_simulator.py '../../../experiments/data/CEA-curie_sample/swf/log.swf' sample_config_profiling.py res.swf
-
-
-runsnake simul.cprof
-
-
-
-
-
-*** How to test pyss?
-./runtests.sh
-
-
-
-
-
-
-*** Exemples of runs:
-
-$ pypy -m cProfile -o simul.cprof ./run_simulator.py sample_config.py
-
-WARINING: [..]
-[..]
-
-STATISTICS: 
-Wait (Tw) [minutes]:  61.5191506329
-Response time (Tw+Tr) [minutes]:  184.139470291
-Slowdown (Tw+Tr) / Tr:  405.583038621
-Bounded slowdown max(1, (Tw+Tr) / max(10, Tr):  63.930142519
-Estimated slowdown (Tw+Tr) / Te:  306.14067403
-Tail slowdown (if bounded_sld >= 3):  419.9131661
-   Number of jobs in the tail:  1474
-Tail Percentile (the top 10% sld):  4036.43339341
-Total Number of jobs:  9924
-Number of jobs used to calculate statistics:  9823
-
-Num of Processors:  80640
-Input file:  ../../../data/CEA-curie_sample/original_swf/log.swf
-Scheduler: <class 'schedulers.easy_scheduler.EasyBackfillScheduler'>
-
-
-
-$ pypy -m cProfile -o simul.cprof ./run_simulator.py sample_config2.py
-
-WARINING: [..]
-[..]
-
-STATISTICS: 
-Wait (Tw) [minutes]:  63.8220180529
-Response time (Tw+Tr) [minutes]:  186.442337711
-Slowdown (Tw+Tr) / Tr:  438.943506263
-Bounded slowdown max(1, (Tw+Tr) / max(10, Tr):  71.2782829212
-Estimated slowdown (Tw+Tr) / Te:  350.31818206
-Tail slowdown (if bounded_sld >= 3):  536.229754526
-   Number of jobs in the tail:  1289
-Tail Percentile (the top 10% sld):  4371.72912372
-Total Number of jobs:  9924
-Number of jobs used to calculate statistics:  9823
-
-Num of Processors:  80640
-Input file:  ../../../data/CEA-curie_sample/original_swf/log.swf
-Scheduler: <class 'schedulers.easy_plus_plus_scheduler.EasyPlusPlusScheduler'>
-
-
-
-
-df2gantt(swf_read('../../simulation/pyss/src/res.swf'))
-
-
-
-
-*** To remove assert I did :
+** To remove assert I did :
 for i in schedulers/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
 for i in base/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
+

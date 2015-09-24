@@ -8,17 +8,10 @@ scheduler = {
 	"progressbar": False
 	}
 
-#a file in the standard workload format: http://www.cs.huji.ac.il/labs/parallel/workload/swf.html
-# if '-' read from stdin
-input_file = '../../../data/CEA-curie_sample/original_swf/log.swf'
-
-#the number of available processors in the simulated parallel machine
-num_processors = 80640
+#Force the number of available processors in the simulated parallel machine
+#num_processors = 80640
 
 #should some stats have to be computed?
-stats = True
-
-#if set, create a swf file of the run
-output_swf = 'res.swf'
+stats = False
 
 
