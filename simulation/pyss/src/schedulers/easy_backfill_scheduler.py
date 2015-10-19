@@ -65,26 +65,32 @@ class EasyBackfillScheduler(Scheduler):
             return []
         
         result = []
-        tail_of_waiting_list = list_copy(self.unscheduled_jobs[1:])
         first_job = self.unscheduled_jobs[0]
-        starttime = self.cpu_snapshot.assignJobEarliest(first_job, current_time)
-        
-        job_max_procs = first_job.num_required_processors
-        job_max_runtime = first_job.predicted_run_time
-        
-        for job in tail_of_waiting_list:
-            if job.predicted_run_time >= job_max_runtime and job.num_required_processors >= job_max_procs:
-                 continue
-            if self.cpu_snapshot.canJobStartNow(job, current_time):
-                job.is_backfilled = 1
-                self.unscheduled_jobs.remove(job)
-                self.cpu_snapshot.assignJob(job, current_time)
-                result.append(job)
+        shadow_time = self.cpu_snapshot.jobEarliestAssignment(first_job, current_time)
+        shadow_len = shadow_time - current_time
+        #this can be done at the same time as jobEarliestAssignment
+        extra_cpu = self.cpu_snapshot.free_processors_available_at(shadow_time)-first_job.num_required_processors
+        nonextra_cpu = self.cpu_snapshot.free_processors_available_at(current_time)-extra_cpu
+        if nonextra_cpu < 0:
+            extra_cpu += nonextra_cpu#<=> =self.cpu_snapshot.free_processors_available_at(current_time)
+            nonextra_cpu = 0
+
+        for job in self.unscheduled_jobs[1:]:
+            if job.predicted_run_time > shadow_len:
+                if job.num_required_processors <= extra_cpu:
+                    result.append(job)
+                    self.cpu_snapshot.assignJob(job, current_time)
+                    extra_cpu -= job.num_required_processors
             else:
-                if job.predicted_run_time <= job_max_runtime and job.num_required_processors <= job_max_procs:
-                    job_max_procs = job.num_required_processors
-                    job_max_runtime = job.predicted_run_time
-        
-        self.cpu_snapshot.unAssignJob(first_job)
+                if job.num_required_processors <= extra_cpu+nonextra_cpu:
+                    result.append(job)
+                    self.cpu_snapshot.assignJob(job, current_time)
+                    nonextra_cpu -= job.num_required_processors
+                    if nonextra_cpu < 0:
+                        extra_cpu += nonextra_cpu
+                        nonextra_cpu = 0
+
+        for job in result:
+            self.unscheduled_jobs.remove(job)
 
         return result

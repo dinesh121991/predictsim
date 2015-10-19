@@ -24,7 +24,7 @@ class  AlphaEasyScheduler(EasyPlusPlusScheduler):
 
 
     def new_events_on_job_termination(self, job, current_time):
-        pass #assert self.user_jobs.has_key(job.user_id) == True
+        assert self.user_jobs.has_key(job.user_id) == True
  
         self.user_jobs[job.user_id].append(job)
         self.cpu_snapshot.archive_old_slices(current_time)

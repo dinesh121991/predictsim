@@ -109,7 +109,7 @@ class test_EventQueue(TestCase):
     def test_remove_event_fails_on_missing_event(self):
         event1 = prototype.JobEvent(0, 0)
         event2 = prototype.JobEvent(0, 1)
-        pass #assert event1 != event2 # different events
+        assert event1 != event2 # different events
         self.queue.add_event(event1)
         self.assertRaises(Exception, self.queue.remove_event, event2)
 
@@ -120,13 +120,13 @@ class test_EventQueue(TestCase):
 
     def test_pop_one_job(self):
         self.queue.add_event( self.event )
-        pass #assert self.queue.pop() is self.event
+        assert self.queue.pop() is self.event
 
     def test_pop_many_jobs(self):
         for event in self.events:
             self.queue.add_event(event)
         for event in self.events:
-            pass #assert self.queue.pop() is event
+            assert self.queue.pop() is event
 
     def test_pop_empty(self):
         self.assertRaises(AssertionError, self.queue.pop)
@@ -324,7 +324,7 @@ class test_ValidatingMachine(TestCase):
     def test_add_job(self):
         job = self._unique_job()
         self.machine._add_job(job, current_timestamp=0)
-        pass #assert job in self.machine.jobs
+        assert job in self.machine.jobs
 
     def test_add_several_jobs_success(self):
         for i in xrange(5):
@@ -390,7 +390,7 @@ class test_ValidatingMachine(TestCase):
         )
         self.event_queue.advance()
 
-        pass #assert job in self.machine.jobs
+        assert job in self.machine.jobs
 
 
 class test_StupidScheduler(TestCase):

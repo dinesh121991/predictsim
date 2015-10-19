@@ -116,7 +116,11 @@ EasyBackfillScheduler where predicted_runtime is doubled when backfilling is don
 
 *** Other notes:
 
-** To remove assert I did :
+** To remove asserts:
 for i in schedulers/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
 for i in base/*.py ; do  sed -i 's/assert /pass #assert /g' $i ; done
+** To re-add asserts:
+for i in schedulers/*.py ; do  sed -i 's/pass #assert /assert /g' $i ; done
+for i in base/*.py ; do  sed -i 's/pass #assert /assert /g' $i ; done
+
 

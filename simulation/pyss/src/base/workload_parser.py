@@ -10,7 +10,7 @@
 class JobInput(object):
     def __init__(self, line):
         self.fields = line.split()
-        pass #assert len(self.fields) == 18
+        assert len(self.fields) == 18
 
     # lazy access as properties, for efficiency
     @property
@@ -106,8 +106,8 @@ def _measure_performance():
 
 def _test():
     job = JobInput("   59    26613      0    716   32     -1    -1   -1     -1    -1 -1   4   1   3  0 -1 -1 -1")
-    pass #assert str(job).startswith("JobInput")
-    pass #assert job.number == 59
+    assert str(job).startswith("JobInput")
+    assert job.number == 59
 
 if __name__ == "__main__":
     import optparse

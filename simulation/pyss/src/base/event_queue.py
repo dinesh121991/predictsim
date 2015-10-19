@@ -29,14 +29,14 @@ class EventQueue(object):
         self._latest_handled_timestamp = -1
 
     def add_event(self, event):
-        pass #assert (event.timestamp, event) not in self._events_heap # TODO: slow assert, disable for production
-        pass #assert event.timestamp >= self._latest_handled_timestamp
+        assert (event.timestamp, event) not in self._events_heap # TODO: slow assert, disable for production
+        assert event.timestamp >= self._latest_handled_timestamp
 
         # insert into heap
         self._events_heap.push( (event.timestamp, event) )
 
     def remove_event(self, event):
-        pass #assert (event.timestamp, event) in self._events_heap
+        assert (event.timestamp, event) in self._events_heap
         self._events_heap.remove( (event.timestamp, event) )
 
     @property
@@ -57,7 +57,7 @@ class EventQueue(object):
         return len(self._events_heap)
 
     def pop(self):
-        pass #assert not self.is_empty
+        assert not self.is_empty
         timestamp, event = self._events_heap.pop()
         return event
 
@@ -70,7 +70,7 @@ class EventQueue(object):
     def advance(self):
         "pop and handle the next event in the queue"
 
-        pass #assert not self.is_empty
+        assert not self.is_empty
         event = self.pop()
         for handler in self._get_event_handlers( type(event) ):
             handler(event)

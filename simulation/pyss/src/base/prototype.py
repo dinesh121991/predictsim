@@ -55,9 +55,9 @@ class Job(object):
     def __init__(self, id, user_estimated_run_time, actual_run_time, num_required_processors, \
             submit_time=0, admin_QoS=0, user_QoS=0, user_id=0, think_time=0): # TODO: are these defaults used?
 
-        pass #assert num_required_processors > 0, "job_id=%s"%id
-        pass #assert actual_run_time > 0, "job_id=%s"%id
-        pass #assert user_estimated_run_time > 0, "job_id=%s"%id
+        assert num_required_processors > 0, "job_id=%s"%id
+        assert actual_run_time > 0, "job_id=%s"%id
+        assert user_estimated_run_time > 0, "job_id=%s"%id
 
         self.id = id
         self.user_estimated_run_time = user_estimated_run_time
@@ -88,12 +88,12 @@ class Job(object):
 
     @property
     def finish_time(self):
-        pass #assert self.start_to_run_at_time != -1
+        assert self.start_to_run_at_time != -1
         return self.start_to_run_at_time + self.actual_run_time
 
     @property
     def predicted_finish_time(self):
-        pass #assert self.start_to_run_at_time != -1
+        assert self.start_to_run_at_time != -1
         return self.start_to_run_at_time + self.predicted_run_time
 
     def __repr__(self):
@@ -125,7 +125,7 @@ class Machine(object):
         self.event_queue.add_handler(JobStartEvent, self._start_job_handler)
 
     def _start_job_handler(self, event):
-        pass #assert type(event) == JobStartEvent
+        assert type(event) == JobStartEvent
         if event.job.start_to_run_at_time not in (-1, event.timestamp):
             # outdated job start event, ignore
             # TODO: remove the possibility for outdated events
@@ -133,7 +133,7 @@ class Machine(object):
         self._add_job(event.job, event.timestamp)
 
     def _add_job(self, job, current_timestamp):
-        pass #assert job.actual_run_time  <= job.user_estimated_run_time
+        assert job.actual_run_time  <= job.user_estimated_run_time
 
         self.event_queue.add_event(JobTerminationEvent(job=job, timestamp=current_timestamp+job.actual_run_time))
         if job.predicted_run_time < job.actual_run_time:
@@ -154,12 +154,12 @@ class ValidatingMachine(Machine):
         self.event_queue.add_handler(JobTerminationEvent, self._remove_job_handler)
 
     def _add_job(self, job, current_timestamp):
-        pass #assert job.num_required_processors <= self.free_processors
+        assert job.num_required_processors <= self.free_processors
         self.jobs.add(job)
         super(ValidatingMachine, self)._add_job(job, current_timestamp)
 
     def _remove_job_handler(self, event):
-        pass #assert type(event) == JobTerminationEvent
+        assert type(event) == JobTerminationEvent
         self.jobs.remove(event.job)
 
     @property
@@ -272,19 +272,19 @@ class Simulator(object):
             self.event_queue.advance()
 
     def handle_submission_event(self, event):
-        pass #assert isinstance(event, JobSubmissionEvent)
+        assert isinstance(event, JobSubmissionEvent)
         newEvents = self.scheduler.handleSubmissionOfJobEvent(event.job, event.timestamp)
         for event in newEvents:
             self.event_queue.add_event(event)
 
     def handle_termination_event(self, event):
-        pass #assert isinstance(event, JobTerminationEvent)
+        assert isinstance(event, JobTerminationEvent)
         newEvents = self.scheduler.handleTerminationOfJobEvent(event.job, event.timestamp)
         for event in newEvents:
             self.event_queue.add_event(event)
 
     def handle_prediction_is_over_event(self, event):
-        pass #assert isinstance(event, JobPredictionIsOverEvent)
+        assert isinstance(event, JobPredictionIsOverEvent)
         newEvents = self.scheduler.handlePredictionIsOverEvent(event.job, event.timestamp)
         for event in newEvents:
             self.event_queue.add_event(event)
