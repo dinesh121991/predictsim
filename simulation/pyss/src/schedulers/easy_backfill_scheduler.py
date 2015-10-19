@@ -60,7 +60,6 @@ class EasyBackfillScheduler(Scheduler):
     def _backfill_jobs(self, current_time):
         """
         Find jobs that can be backfilled and update the cpu snapshot.
-        DEPRECATED FUNCTION !!!!!!
         """
         if len(self.unscheduled_jobs) <= 1:
             return []
