@@ -2,13 +2,23 @@ from common import CpuSnapshot
 
 class Weights(object):
     # this class defines the configuration of weights for the MAUI
-    def __init__(self, w_wtime=1, w_sld=0, w_user=0, w_bypass=0, w_admin=0, w_size=0):
+    def __init__(self, w_wtime=1, w_sld=0, w_bsld=0, w_user=0, w_bypass=0, w_admin=0, w_size=0):
         self.wtime  = w_wtime  # weight of wait time since submission
         self.sld    = w_sld    # weight of slow down
+        self.bsld   = w_bsld   # weight of bounded slow down
         self.user   = w_user   # weight of user desired quality of service
         self.bypass = w_bypass # weight of being skipped over in the waiting list
         self.admin  = w_admin  # weight of asmin desired quality of service
         self.size   = w_size   # weight of job size (= num_required_processors)
+    def to_float(self):
+        self.wtime  = 1.0*self.wtime
+        self.sld    = 1.0*self.sld
+        self.bsld   = 1.0*self.bsld
+        self.user   = 1.0*self.user
+        self.bypass = 1.0*self.bypass
+        self.admin  = 1.0*self.admin
+        self.size   = 1.0*self.size
+        
 
 
 # a first toy version for the maui -- essentially the difference between this
@@ -23,6 +33,7 @@ class MauiScheduler(EasyBackfillScheduler):
         super(MauiScheduler, self).__init__(options)
         self.maui_counter = 0
 
+        # Retrocompatibility
         # weights for calculation of priorities for the jobs in MAUI style
         if weights_list is not None:
             self.weights_list = weights_list
@@ -33,6 +44,23 @@ class MauiScheduler(EasyBackfillScheduler):
             self.weights_backfill = weights_backfill
         else:
             self.weights_backfill = Weights(1, 0, 0, 0, 0, 0) # sort the jobs by order of submission
+        
+        if "weights_list" in options["scheduler"]:
+            l = options["scheduler"]["weights_list"]
+            self.weights_list = Weights(l[0],l[1],l[2],l[3],l[4],l[5],l[6])
+            if l[7] != "USE_PROTECTION":
+                print("the list of weight should end with 'USE_PROTECTION'")
+                print("(do you change the list of wieghts?)")
+                exit()
+        if "weights_backfill" in options["scheduler"]:
+            l = options["scheduler"]["weights_list"]
+            self.weights_backfill = Weights(l[0],l[1],l[2],l[3],l[4],l[5],l[6])
+            if l[7] != "USE_PROTECTION":
+                print("the list of weight should end with 'USE_PROTECTION'")
+                print("(do you change the list of wieghts?)")
+                exit()
+        self.weights_list.to_float()
+        self.weights_backfill.to_float()
 
     def new_events_on_job_submission(self, just_submitted_job, current_time):
         "Overriding parent method"
@@ -72,11 +100,13 @@ class MauiScheduler(EasyBackfillScheduler):
 
     def aggregated_weight_of_job(self, weights, job, current_time):
         wait = current_time - job.submit_time # wait time since submission of job
-        sld = (wait + job.user_estimated_run_time) /  job.user_estimated_run_time
+        sld = (wait + job.predicted_run_time) / job.predicted_run_time
+        bsld = max((wait + job.predicted_run_time) /  max(job.predicted_run_time,10.0), 1.0)
 
         return (
             weights.wtime  * wait +
             weights.sld    * sld +
+            weights.bsld   * bsld +
             weights.user   * job.user_QoS +
             weights.bypass * job.maui_bypass_counter +
             weights.admin  * job.admin_QoS +
