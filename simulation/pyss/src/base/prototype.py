@@ -88,12 +88,12 @@ class Job(object):
 
     @property
     def finish_time(self):
-        assert self.start_to_run_at_time != None
+        assert not( self.start_to_run_at_time is None), "Job not yet launched"
         return self.start_to_run_at_time + self.actual_run_time
 
     @property
     def predicted_finish_time(self):
-        assert self.start_to_run_at_time != None
+        assert not( self.start_to_run_at_time is None), "Job not yet launched"
         return self.start_to_run_at_time + self.predicted_run_time
 
     def __repr__(self):
