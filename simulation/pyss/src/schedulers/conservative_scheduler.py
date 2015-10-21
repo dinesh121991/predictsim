@@ -2,7 +2,9 @@ from common import Scheduler, CpuSnapshot
 from base.prototype import JobStartEvent
 
 class ConservativeScheduler(Scheduler):
-
+"""
+WARNING: job.start_to_run_at_time were set to -1 whe,n unknown. It's now set to None. And this scheduler have not been tested since!
+"""
     def __init__(self, options):
         super(ConservativeScheduler, self).__init__(options)
         self.cpu_snapshot = CpuSnapshot(self.num_processors, options["stats"])

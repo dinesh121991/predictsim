@@ -68,7 +68,7 @@ class Job(object):
 
         # not used by base
         self.submit_time = submit_time # Assumption: submission time is greater than zero
-        self.start_to_run_at_time = -1 # TODO: convert to None
+        self.start_to_run_at_time = None
 
         # the next are essentially for the MauiScheduler
         self.admin_QoS  = admin_QoS # the priority given by the system administration
@@ -88,12 +88,12 @@ class Job(object):
 
     @property
     def finish_time(self):
-        assert self.start_to_run_at_time != -1
+        assert self.start_to_run_at_time != None
         return self.start_to_run_at_time + self.actual_run_time
 
     @property
     def predicted_finish_time(self):
-        assert self.start_to_run_at_time != -1
+        assert self.start_to_run_at_time != None
         return self.start_to_run_at_time + self.predicted_run_time
 
     def __repr__(self):
@@ -126,10 +126,7 @@ class Machine(object):
 
     def _start_job_handler(self, event):
         assert type(event) == JobStartEvent
-        if event.job.start_to_run_at_time not in (-1, event.timestamp):
-            # outdated job start event, ignore
-            # TODO: remove the possibility for outdated events
-            return
+        assert event.job.start_to_run_at_time not in (None, event.timestamp)
         self._add_job(event.job, event.timestamp)
 
     def _add_job(self, job, current_timestamp):
