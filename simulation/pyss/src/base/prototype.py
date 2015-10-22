@@ -126,7 +126,7 @@ class Machine(object):
 
     def _start_job_handler(self, event):
         assert type(event) == JobStartEvent
-        assert event.job.start_to_run_at_time not in (None, event.timestamp)
+        #assert event.job.start_to_run_at_time not in (None, event.timestamp)
         self._add_job(event.job, event.timestamp)
 
     def _add_job(self, job, current_timestamp):

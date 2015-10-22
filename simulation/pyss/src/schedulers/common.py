@@ -180,7 +180,6 @@ class CpuSnapshot(object):
         
     @property
     def snapshot_end_time(self):
-        assert len(self.slices) > 0
         return self.slices.last.end_time
 
 
